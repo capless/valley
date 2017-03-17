@@ -1,4 +1,5 @@
 import datetime
+import re
 import time
 import six
 
@@ -16,6 +17,15 @@ __all__ = [
     "DateValidator",
     "DateTimeValidator",
 ]
+
+#Stolen from Django
+email_re = re.compile(
+    r"(^[-!#$%&'*+/=?^_`{}|~0-9A-Z]+(\.[-!#$%&'*+/=?^_`{}|~0-9A-Z]+)*"  # dot-atom
+    r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-011\013\014\016-\177])*"' # quoted-string
+    r')@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?$', re.IGNORECASE)  # domain
+
+
+slug_re = re.compile(r'^[-\w]+$')
 
 
 class Validator(object):
@@ -41,6 +51,29 @@ class StringValidator(Validator):
                 '{0}: This value should '
                 'be a string'.format(key)
             )
+
+
+class SlugValidator(Validator):
+
+    error_msg = '{0}: This value should be a slug. ex. pooter-is-awesome'
+
+    def validate(self, value, key):
+        try:
+            if not slug_re.match(value):
+                raise ValidationException(self.error_msg.format(key))
+        except TypeError:
+            raise ValidationException(self.error_msg.format(key))
+
+
+class EmailValidator(Validator):
+    error_msg = '{0}: This value should be a valid email address'
+
+    def validate(self, value, key):
+        try:
+            if not email_re.match(value):
+                raise ValidationException(self.error_msg.format(key))
+        except TypeError:
+            raise ValidationException(self.error_msg.format(key))
 
 
 class DateValidator(Validator):
