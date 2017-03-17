@@ -17,7 +17,7 @@ class VariableMixin(object):
 class CharVariableMixin(VariableMixin):
 
     def get_validators(self):
-        VariableMixin.get_validators(self)
+        super(CharVariableMixin, self).get_validators()
         self.validators.append(StringValidator())
         if self.kwargs.get('min_length'):
             self.validators.append(MinLengthValidator(

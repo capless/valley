@@ -46,6 +46,8 @@ class RequiredValidator(Validator):
 class StringValidator(Validator):
 
     def validate(self, value, key=None):
+        if not value:
+            return
         if value and not isinstance(value, six.string_types):
             raise ValidationException(
                 '{0}: This value should '
@@ -58,6 +60,8 @@ class SlugValidator(Validator):
     error_msg = '{0}: This value should be a slug. ex. pooter-is-awesome'
 
     def validate(self, value, key):
+        if not value:
+            return
         try:
             if not slug_re.match(value):
                 raise ValidationException(self.error_msg.format(key))
@@ -69,6 +73,8 @@ class EmailValidator(Validator):
     error_msg = '{0}: This value should be a valid email address'
 
     def validate(self, value, key):
+        if not value:
+            return
         try:
             if not email_re.match(value):
                 raise ValidationException(self.error_msg.format(key))
@@ -79,6 +85,8 @@ class EmailValidator(Validator):
 class DateValidator(Validator):
 
     def validate(self, value, key=None):
+        if not value:
+            return
         if value and isinstance(value, six.string_types):
             try:
                 value = datetime.date(*time.strptime(value, '%Y-%m-%d')[:3])
@@ -92,6 +100,8 @@ class DateValidator(Validator):
 class DateTimeValidator(Validator):
 
     def validate(self, value, key=None):
+        if not value:
+            return
         if value and isinstance(value, six.string_types):
             try:
                 value = value.split('.', 1)[0]  # strip out microseconds
@@ -107,6 +117,8 @@ class DateTimeValidator(Validator):
 class IntegerValidator(Validator):
 
     def validate(self, value, key=None):
+        if not value:
+            return
         if value and not isinstance(value, int):
             raise ValidationException(
                 '{0}: This value should be an integer'.format(key))
@@ -115,6 +127,8 @@ class IntegerValidator(Validator):
 class FloatValidator(Validator):
 
     def validate(self, value, key=None):
+        if not value:
+            return
         if value and not isinstance(value, float):
             raise ValidationException(
                 '{0}: This value should be a float.'.format(key))
@@ -126,6 +140,8 @@ class MaxValueValidator(Validator):
         self.compare_value = compare_value
 
     def validate(self, value, key=None):
+        if not value:
+            return
         if isinstance(value, (float, int)) and value > self.compare_value:
             raise ValidationException(
                 '{0}: This value should '
@@ -137,6 +153,8 @@ class MaxValueValidator(Validator):
 class MinValueValidator(MaxValueValidator):
 
     def validate(self, value, key=None):
+        if not value:
+            return
         if isinstance(value, (float, int)) and value < self.compare_value:
             raise ValidationException(
                 '{0}: This value should '
@@ -151,6 +169,8 @@ class MaxLengthValidator(Validator):
         self.length = length
 
     def validate(self, value, key=None):
+        if not value:
+            return
         if not isinstance(value, int) and len(value) > self.length:
             raise ValidationException(
                 '{0}: This value should '
@@ -162,6 +182,8 @@ class MaxLengthValidator(Validator):
 class MinLengthValidator(MaxLengthValidator):
 
     def validate(self, value, key):
+        if not value:
+            return
         if not isinstance(value, int) and len(value) < self.length:
             raise ValidationException(
                 '{0}: This value should '
@@ -173,6 +195,8 @@ class MinLengthValidator(MaxLengthValidator):
 class BooleanValidator(Validator):
 
     def validate(self, value, key):
+        if not value:
+            return
         try:
             int(value)
         except (TypeError, ValueError):
