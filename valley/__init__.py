@@ -195,8 +195,6 @@ class MinLengthValidator(MaxLengthValidator):
 class BooleanValidator(Validator):
 
     def validate(self, value, key):
-        if not value:
-            return
         try:
             int(value)
         except (TypeError, ValueError):
