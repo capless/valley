@@ -1,6 +1,6 @@
 import unittest
 import datetime
-from valley import (RequiredValidator, DateTimeValidator,
+from valley.validators import (RequiredValidator, DateTimeValidator,
                             DateValidator, FloatValidator, IntegerValidator,
                             MaxLengthValidator, MinLengthValidator,
                             MaxValueValidator, MinValueValidator,
