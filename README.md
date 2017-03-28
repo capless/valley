@@ -10,7 +10,7 @@ Python validation library.
 - [Utils](#utils)
 - [Exceptions](#exceptions)
 
-##Schema
+## Schema
 
 Utility to make building declarative syntax validation libraries easier. 
  
@@ -57,27 +57,27 @@ True
 >>frog.is_valid
 False
 >>frog.validate()
----------------------------------------------------------------------------
+
 ValidationException                       Traceback (most recent call last)
 <ipython-input-8-401f014a1e5c> in <module>()
       1 frog = Animal(name='Frog',color='Green',meal_type='carnivore')
       2 
-----> 3 frog.validate()
+      3 frog.validate()
 
 /home/coder/workspace/valley/valley/schema.pyc in validate(self)
      55                     self._errors[key] = e.error_msg
      56                 else:
----> 57                     raise e
+     57                     raise e
      58             value = prop.get_python_value(data.get(key))
      59             data[key] = value
 
 ValidationException: age: This value is required
 ```
 
-##Properties
+## Properties
 
-##Mixins
+## Mixins
 
-##Utils
+## Utils
 
-##Exceptions
+## Exceptions
