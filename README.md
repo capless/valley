@@ -59,7 +59,7 @@ False
 >>frog.validate()
 
 ValidationException                       Traceback (most recent call last)
-<ipython-input-8-401f014a1e5c> in <module>()
+
       1 frog = Animal(name='Frog',color='Green',meal_type='carnivore')
       2 
       3 frog.validate()
