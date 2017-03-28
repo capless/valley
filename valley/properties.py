@@ -1,6 +1,14 @@
 import collections
 
-from valley.mixins import VariableMixin
+import datetime
+
+import six
+
+from valley.exceptions import ValidationException
+from valley.mixins import VariableMixin, CharVariableMixin, \
+    IntegerVariableMixin, FloatVariableMixin, BooleanMixin, \
+    DateMixin, DateTimeMixin
+from valley.validators import BooleanValidator
 
 
 class BaseProperty(VariableMixin, object):
@@ -127,7 +135,7 @@ class DateProperty(DateMixin, BaseProperty):
             return None
         if isinstance(value, six.string_types):
             try:
-                value = datetime.date(*time.strptime(value, '%Y-%m-%d')[:3])
+                value = datetime.date(*datetime.time.strptime(value, '%Y-%m-%d')[:3])
             except ValueError as e:
                 raise ValueError('Invalid ISO date %r [%s]' % (value,
                                                                str(e)))

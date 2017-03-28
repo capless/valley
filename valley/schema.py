@@ -1,6 +1,6 @@
 import collections
 
-from valley import ValidationException
+from valley.exceptions import ValidationException
 
 
 class BaseSchema(object):

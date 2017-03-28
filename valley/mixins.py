@@ -1,4 +1,4 @@
-from . import (RequiredValidator, StringValidator,
+from .validators import (RequiredValidator, StringValidator,
                 MaxLengthValidator, MinLengthValidator,
                 IntegerValidator, MaxValueValidator,
                 MinValueValidator, FloatValidator,
