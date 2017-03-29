@@ -1,14 +1,7 @@
-import collections
-
-import datetime
-
-import six
-
-from valley.exceptions import ValidationException
 from valley.mixins import VariableMixin, CharVariableMixin, \
     IntegerVariableMixin, FloatVariableMixin, BooleanMixin, \
-    DateMixin, DateTimeMixin
-from valley.validators import BooleanValidator
+    DateMixin, DateTimeMixin, SlugVariableMixin, EmailVariableMixin
+
 
 
 class BaseProperty(VariableMixin, object):
@@ -30,72 +23,29 @@ class BaseProperty(VariableMixin, object):
         if verbose_name:
             self.verbose_name = verbose_name
 
-    def validate(self, value, key):
-        if not value and not isinstance(self.get_default_value(), type(None)):
-            value = self.get_default_value()
-        for i in self.validators:
-            i.validate(value, key)
-
-    def get_default_value(self):
-        """ return default value """
-        default = self.default_value
-        if isinstance(default, collections.Callable):
-            default = default()
-        return default
-
-    def get_db_value(self, value):
-        return value
-
-    def get_python_value(self, value):
-        return value
-
 
 class CharProperty(CharVariableMixin, BaseProperty):
+    pass
 
-    def get_db_value(self, value):
-        return str(value)
 
-    def get_python_value(self, value):
-        if not value:
-            return None
-        return str(value)
+class SlugProperty(SlugVariableMixin, CharProperty):
+    pass
+
+
+class EmailProperty(EmailVariableMixin, CharProperty):
+    pass
 
 
 class IntegerProperty(IntegerVariableMixin, BaseProperty):
-
-    def get_db_value(self, value):
-        return int(value)
-
-    def get_python_value(self, value):
-        if not value:
-            return None
-        return int(value)
+    pass
 
 
 class FloatProperty(FloatVariableMixin, BaseProperty):
-
-    def get_db_value(self, value):
-        return float(value)
-
-    def get_python_value(self, value):
-        if not value:
-            return None
-        return float(value)
+    pass
 
 
 class BooleanProperty(BooleanMixin, BaseProperty):
-
-    def get_db_value(self, value):
-        return bool(value)
-
-    def get_python_value(self, value):
-        if not value:
-            return False
-        try:
-            BooleanValidator().validate(value, 'boolean')
-        except ValidationException:
-            return value
-        return bool(value)
+    pass
 
 
 class DateProperty(DateMixin, BaseProperty):
@@ -121,30 +71,6 @@ class DateProperty(DateMixin, BaseProperty):
         self.auto_now = auto_now
         self.auto_now_add = auto_now_add
 
-    def now(self):
-        return datetime.datetime.now().date()
-
-    def get_default_value(self):
-        default = self.default_value
-        if self.auto_now or self.auto_now_add:
-            return self.now()
-        return default
-
-    def get_python_value(self, value):
-        if not value:
-            return None
-        if isinstance(value, six.string_types):
-            try:
-                value = datetime.date(*datetime.time.strptime(value, '%Y-%m-%d')[:3])
-            except ValueError as e:
-                raise ValueError('Invalid ISO date %r [%s]' % (value,
-                                                               str(e)))
-        return value
-
-    def get_db_value(self, value):
-        if value is None:
-            return value
-        return value.isoformat()
 
 
 class DateTimeProperty(DateTimeMixin, BaseProperty):
@@ -170,33 +96,3 @@ class DateTimeProperty(DateTimeMixin, BaseProperty):
         self.auto_now = auto_now
         self.auto_now_add = auto_now_add
 
-    def get_default_value(self):
-        default = self.default_value
-        if self.auto_now or self.auto_now_add:
-            return self.now()
-        return default
-
-    def get_python_value(self, value):
-        if isinstance(value, six.string_types):
-            try:
-                value = value.split('.', 1)[0]  # strip out microseconds
-                value = value[0:19]  # remove timezone
-                value = datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S')
-            except ValueError as e:
-                raise ValueError('Invalid ISO date/time %r [%s]' %
-                                 (value, str(e)))
-        return value
-
-    def get_db_value(self, value):
-        if not value:
-            return None
-        if self.auto_now:
-            value = self.now()
-
-        if value is None:
-            return value
-
-        return value.replace(microsecond=0).isoformat() + 'Z'
-
-    def now(self):
-        return datetime.datetime.utcnow()
