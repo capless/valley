@@ -1,18 +1,28 @@
-# valley
+# Valley
 
-Python validation library.
+Python extensible schema validations and declarative syntax helpers.
 
-- [Schema](#schema)
+## Installation
+
+`pip install valley`
+
+## Getting Started
+
+- [Library Comparison](https://github.com/capless/valley/blob/master/notebooks/valley-vs-schema-vs-schematics.ipynb) - **Valley** vs **Schema** vs **Schematics**
+- [Projects using Valley](#projects-using-valley)
+- [Schema and Declarative Syntax Helpers](#schema-and-declarative-syntax-helpers)
 - [Properties](#properties)
-- [Validators](#validators)
-- [Declarative Syntax Helpers](#declarative-syntax-helpers)
-- [Mixins](#mixins)
-- [Utils](#utils)
-- [Exceptions](#exceptions)
 
-## Schema
 
-Utility to make building declarative syntax validation libraries easier. 
+
+### Projects Using Valley
+
+- [kev](https://github.com/capless/kev) - **K.E.V.** (Keys, Extra Stuff, and Values) is a Python ORM for key-value stores. Currently supported backends are Redis, S3, DynamoDB, and a S3/Redis hybrid backend.
+- [formy](https://github.com/capless/formy) - **Formy** is a Python forms library with Jinja2 templates
+
+### Schema and Declarative Syntax Helpers
+
+The schema class **[(valley.contrib.Schema)](https://github.com/capless/valley/blob/master/valley/contrib/__init__.py)** provides the model for validating properties. Valley also includes utilities **[(valley.declarative)](https://github.com/capless/valley/blob/master/valley/declarative.py)** to make building declarative syntax validation libraries easier. See an example below. 
  
 ```python
 from six import with_metaclass
@@ -74,10 +84,173 @@ ValidationException                       Traceback (most recent call last)
 ValidationException: age: This value is required
 ```
 
-## Properties
+### Properties
 
-## Mixins
+#### BaseProperty
 
-## Utils
+Base class that all of the following properties are subclassed from.
 
-## Exceptions
+##### Default Validators
+
+- RequiredValidator (if the required kwarg is set)
+
+#### CharProperty
+
+Validates that the input is a string type. More specifically it checks `six.string_types`
+
+##### Example
+
+```python
+from valley.properties import CharProperty
+
+first_name = CharProperty(required=True,min_length=1,max_length=20)
+first_name.validate('Some string','First Name')
+```
+
+##### Default Validators
+
+- Validators from BaseProperty
+- StringValidator
+- MinLengthValidator (if min_length kwarg is set)
+- MaxLengthValidator (if max_length kwarg is set)
+
+#### SlugProperty
+
+Validates that the input is a string type but is also a slug (ex. this-is-a-slug). 
+
+##### Example
+
+```python
+from valley.properties import SlugProperty
+
+slug = SlugProperty(required=True,min_length=1,max_length=20)
+slug.validate('some-slug','Slug')
+```
+
+##### Default Validators
+
+- Validators from BaseProperty
+- StringValidator
+- MinLengthValidator (if min_length kwarg is set)
+- MaxLengthValidator (if max_length kwarg is set)
+- SlugValidator
+
+#### EmailProperty
+
+Validates that the input is a string type but is also in valid email format. 
+
+##### Example
+
+```python
+from valley.properties import EmailProperty
+
+email = EmailProperty(required=True,min_length=1,max_length=20)
+email.validate('you@you.com','Email')
+```
+
+##### Default Validators
+
+- Validators from BaseProperty
+- StringValidator
+- MinLengthValidator (if min_length kwarg is set)
+- MaxLengthValidator (if max_length kwarg is set)
+- EmailValidator
+
+
+#### IntegerProperty
+
+Validates that the input is a integer type.
+
+##### Example
+
+```python
+from valley.properties import IntegerProperty
+
+age = IntegerProperty(required=True,min_value=1,max_value=20)
+age.validate(5,'Age')
+```
+
+##### Default Validators
+
+- Validators from BaseProperty
+- IntegerValidator
+- MinValuehValidator (if min_value kwarg is set)
+- MaxLengthValidator (if max_value kwarg is set)
+
+
+#### FloatProperty
+
+Validates that the input is a float type.
+
+##### Example
+
+```python
+from valley.properties import FloatProperty
+
+gpa = FloatProperty(required=True,min_value=1,max_value=20)
+gpa.validate(4.0,'GPA')
+```
+
+##### Default Validators
+
+- Validators from BaseProperty
+- FloatValidator
+- MinValuehValidator (if min_value kwarg is set)
+- MaxLengthValidator (if max_value kwarg is set)
+
+#### BooleanProperty
+
+Validataes that the input is a bool type.
+
+##### Example
+
+```python
+from valley.properties import BooleanProperty
+
+active = BooleanProperty()
+active.validate(True,'Active')
+```
+##### Default Validators
+
+- Validators from BaseProperty
+- BooleanValidator
+
+#### DateProperty
+
+Validates that the input is a date object or a string that can be transformed to a date object.
+ 
+##### Example
+
+```python
+from valley.properties import DateProperty
+
+active = DateProperty(required=True)
+active.validate('2017-03-27','Active')
+```
+
+##### Default Validators
+
+- Validators from BaseProperty
+- DateValidator
+
+
+#### DateTimeProperty
+
+Validates that the input is a datetime object or a string that can be transformed to a datetime object.
+
+##### Example
+
+```python
+from valley.properties import DateTimeProperty
+
+active = DateTimeProperty(required=True)
+active.validate('2017-03-03 12:00:00','Active')
+```
+
+##### Default Validators
+
+- Validators from BaseProperty
+- DateTimeValidator
+
+
+

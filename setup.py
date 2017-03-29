@@ -10,21 +10,21 @@ LONG_DESCRIPTION = """
 Valley
 =======================
 
-Python validations library
+Python extensible schema validations and declarative syntax helpers.
 
 """
 
 setup(
     name='valley',
     version=version,
-    description="""Python validations library""",
+    description="""Python extensible schema validations and declarative syntax helpers.""",
     long_description=LONG_DESCRIPTION,
     classifiers=[
         "Programming Language :: Python",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Environment :: Web Environment",
     ],
-    keywords='validations',
+    keywords='validations,schema,declarative',
     author='Brian Jinwright',
     author_email='opensource@capless.io',
     maintainer='Brian Jinwright',
