@@ -2,17 +2,17 @@
 
 Python extensible schema validations and declarative syntax helpers.
 
-## Goal
+## Installation
 
-## Features
+`pip install valley`
 
 ## Getting Started
 
 - [Library Comparison](https://github.com/capless/valley/blob/master/notebooks/valley-vs-schema-vs-schematics.ipynb) - **Valley** vs **Schema** vs **Schematics**
 - [Projects using Valley](#projects-using-valley)
-- [Schema](#schema)
+- [Schema and Declarative Syntax Helpers](#schema-and-declarative-syntax-helpers)
 - [Properties](#properties)
-- [Declarative Syntax Helpers](#declarative-syntax-helpers)
+
 
 
 ### Projects Using Valley
@@ -20,9 +20,9 @@ Python extensible schema validations and declarative syntax helpers.
 - [kev](https://github.com/capless/kev) - **K.E.V.** (Keys, Extra Stuff, and Values) is a Python ORM for key-value stores. Currently supported backends are Redis, S3, DynamoDB, and a S3/Redis hybrid backend.
 - [formy](https://github.com/capless/formy) - **Formy** is a Python forms library with Jinja2 templates
 
-### Schema
+### Schema and Declarative Syntax Helpers
 
-Utility to make building declarative syntax validation libraries easier. 
+The schema class **[(valley.contrib.Schema)](https://github.com/capless/valley/blob/master/valley/contrib/__init__.py)** provides the model for validating properties. Valley also includes utilities **[(valley.declarative)](https://github.com/capless/valley/blob/master/valley/declarative.py)** to make building declarative syntax validation libraries easier. See an example below. 
  
 ```python
 from six import with_metaclass
