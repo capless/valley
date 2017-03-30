@@ -1,6 +1,7 @@
 import collections
 
 import datetime
+import time
 import six
 
 from valley.exceptions import ValidationException
@@ -137,7 +138,7 @@ class DateMixin(VariableMixin):
             return None
         if isinstance(value, six.string_types):
             try:
-                value = datetime.date(*datetime.time.strptime(value, '%Y-%m-%d')[:3])
+                value = datetime.date(*time.strptime(value, '%Y-%m-%d')[:3])
             except ValueError as e:
                 raise ValueError('Invalid ISO date %r [%s]' % (value,
                                                                str(e)))
