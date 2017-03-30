@@ -8,6 +8,18 @@ Python extensible schema validations and declarative syntax helpers.
 
 ## Getting Started
 
+```python
+class Animal(Schema):
+    name = CharProperty(required=True)
+    species = CharProperty(required=True)
+    color = CharProperty(required=True)
+    meal_type = CharProperty()
+    age = IntegerProperty(required=True)
+    
+frog = Animal(name='Kermit',species='frog',color='green',meal='carnivore',age=1)
+frog.validate()
+```
+
 - [Library Comparison](https://github.com/capless/valley/blob/master/notebooks/valley-vs-schema-vs-schematics.ipynb) - **Valley** vs **Schema** vs **Schematics**
 - [Projects using Valley](#projects-using-valley)
 - [Schema and Declarative Syntax Helpers](#schema-and-declarative-syntax-helpers)
@@ -251,6 +263,4 @@ active.validate('2017-03-03 12:00:00','Active')
 
 - Validators from BaseProperty
 - DateTimeValidator
-
-
 
