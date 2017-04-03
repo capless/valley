@@ -2,7 +2,8 @@ import unittest
 
 from valley.contrib import Schema
 from valley.exceptions import ValidationException
-from valley.properties import CharProperty, EmailProperty, SlugProperty, IntegerProperty, FloatProperty, DateProperty, \
+from valley.properties import CharProperty, EmailProperty, SlugProperty, \
+    IntegerProperty, FloatProperty, DateProperty, \
     DateTimeProperty
 
 
@@ -15,6 +16,10 @@ class Student(Schema):
     gpa = FloatProperty(min_value=0,max_value=4.5)
     date = DateProperty(required=False)
     datetime = DateTimeProperty(required=False)
+
+
+class StudentB(Student):
+    create_error_dict = False
 
 
 class SchemaTestCase(unittest.TestCase):
@@ -73,11 +78,16 @@ class SchemaTestCase(unittest.TestCase):
 class SchemaMethods(unittest.TestCase):
 
     def setUp(self):
-        self.student = Student(name='Frank White',slug='frank-white',
-                    email='frank@white.com',age=18,
-                    gpa=3.0,date='2017-01-10',
-                    datetime='2017-01-10T12:00:00'
-                    )
+        attr_dict = {
+            'name':'Frank White',
+            'slug':'frank-white',
+            'email':'frank@white.com',
+            'age':18, 'gpa':3.0,
+            'date':'2017-01-10',
+            'datetime':'2017-01-10T12:00:00'
+        }
+        self.student = Student(**attr_dict)
+        self.studentb = StudentB(**attr_dict)
 
     def test_setattr(self):
         self.student.name = 'Curious George'
@@ -85,3 +95,14 @@ class SchemaMethods(unittest.TestCase):
 
     def test_getattr(self):
         self.assertEqual(self.student.name,'Frank White')
+
+    def test_process_doc_kwargs(self):
+        response = self.student.process_schema_kwargs({'name':1,'slug':1})
+        self.assertEqual(response,{'name':'1','slug':'1','email':None,
+                                   'age':None,'gpa':None,'date':None,
+                                   'datetime':None})
+
+    def test_error_dict_false_validate(self):
+        self.studentb.name = 1
+        self.assertRaises(ValidationException,self.studentb.validate)
+
