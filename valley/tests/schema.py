@@ -1,5 +1,7 @@
 import unittest
 
+import six
+
 from valley.contrib import Schema
 from valley.exceptions import ValidationException
 from valley.properties import CharProperty, EmailProperty, SlugProperty, \
@@ -37,42 +39,52 @@ class SchemaTestCase(unittest.TestCase):
     def test_long_name(self):
         self.student.name = 'Frank Lindsay Hightower III'
         self.student.validate()
-        self.assertEqual(['name'], self.student._errors.keys())
+        ed = {'name': 'name: This value should have a length lesser than 20. '
+                      'Currently Frank Lindsay Hightower III'}
+        self.assertDictEqual(ed, self.student._errors)
 
     def test_short_name(self):
         self.student.name = 'Ira'
         self.student.validate()
-        self.assertEqual(['name'],self.student._errors.keys())
+        ed = {'name': 'name: This value should have a length greater '
+                      'than 5. Currently Ira'}
+        self.assertDictEqual(ed,self.student._errors)
 
     def test_no_name(self):
         self.student.name = None
         self.student.validate()
-        self.assertEqual(['name'],self.student._errors.keys())
+        ed = {'name': 'name: This value is required'}
+        self.assertDictEqual(ed, self.student._errors)
 
     def test_slug_space(self):
         self.student.slug = 'Some City'
         self.student.validate()
-        self.assertEqual(['slug'],self.student._errors.keys())
+        ed = {'slug': 'slug: This value should be a slug. ex. pooter-is-awesome'}
+        self.assertDictEqual(ed, self.student._errors)
 
     def test_email_space(self):
         self.student.email = 'Some City'
         self.student.validate()
-        self.assertEqual(['email'],self.student._errors.keys())
+        ed = {'email': 'email: This value should be a valid email address'}
+        self.assertDictEqual(ed, self.student._errors)
 
     def test_email_wrong(self):
         self.student.email = 'e+ e@g.com'
         self.student.validate()
-        self.assertEqual(['email'], self.student._errors.keys())
+        ed = {'email': 'email: This value should be a valid email address'}
+        self.assertDictEqual(ed, self.student._errors)
 
     def test_age_numeric_string(self):
         self.student.age = '5'
         self.student.validate()
-        self.assertEqual(['age'], self.student._errors.keys())
+        ed = {'age': 'age: This value should be an integer'}
+        self.assertEqual(ed, self.student._errors)
 
     def test_age_numeric_float(self):
         self.student.age = 5.0
         self.student.validate()
-        self.assertEqual(['age'], self.student._errors.keys())
+        ed = {'age': 'age: This value should be an integer'}
+        self.assertDictEqual(ed, self.student._errors)
 
 
 class SchemaMethods(unittest.TestCase):
