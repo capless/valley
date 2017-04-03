@@ -8,7 +8,7 @@
 
 - Fixed DateTimeProperty and DateTimeVariableMixin
 
-## 1.0.2
+## 1.1.0
 
 - Added OrderedDeclaredVars class
 - Added more tests
