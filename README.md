@@ -2,6 +2,8 @@
 
 Python extensible schema validations and declarative syntax helpers.
 
+[![Build Status](https://travis-ci.org/capless/valley.svg?branch=master)](https://travis-ci.org/capless/valley)
+
 ## Installation
 
 `pip install valley`
