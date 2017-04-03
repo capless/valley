@@ -12,6 +12,7 @@ class BaseSchema(object):
 
     def __init__(self, **kwargs):
         self._data = self.process_schema_kwargs(kwargs)
+        self._errors = {}
 
     def __repr__(self):
         return '<{class_name}: {uni} >'.format(
@@ -25,6 +26,11 @@ class BaseSchema(object):
             prop = self._base_properties[name]
             return prop.get_python_value(self._data.get(name))
 
+    def __setattr__(self, name, value):
+        if name in list(self._base_properties.keys()):
+            self._data[name] = value
+        else:
+            super(BaseSchema, self).__setattr__(name, value)
 
     def process_schema_kwargs(self, kwargs):
         schema_obj = {}
@@ -44,14 +50,14 @@ class BaseSchema(object):
         data = self._data.copy()
         for key, prop in list(self._base_properties.items()):
             prop_validate = getattr(self, '{}_validate'.format(key))
-            self._errors = dict()
             try:
                 prop.validate(data.get(key), key)
                 # This allows devs to specify additional validation for a property
                 if isinstance(prop_validate, collections.Callable):
                     prop_validate(data.get(key))
             except ValidationException as e:
-                if self.create_error_list:
+
+                if self.create_error_dict:
                     self._errors[key] = e.error_msg
                 else:
                     raise e

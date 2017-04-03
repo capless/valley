@@ -25,6 +25,7 @@ email_re = re.compile(
     r')@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?$', re.IGNORECASE)  # domain
 
 
+
 slug_re = re.compile(r'^[-\w]+$')
 
 
@@ -171,11 +172,18 @@ class MaxLengthValidator(Validator):
     def validate(self, value, key=None):
         if not value:
             return
-        if not isinstance(value, int) and len(value) > self.length:
+        try:
+            if not isinstance(value, int) and len(value) > self.length:
+                raise ValidationException(
+                    '{0}: This value should '
+                    'have a length lesser than '
+                    '{1}. Currently {2}'.format(key, self.length, value)
+                )
+        except TypeError:
             raise ValidationException(
                 '{0}: This value should '
                 'have a length lesser than '
-                '{1}. Currently {2}'.format(key, self.length, value)
+                '{1}. Currently unknown'.format(key, self.length)
             )
 
 
@@ -184,11 +192,18 @@ class MinLengthValidator(MaxLengthValidator):
     def validate(self, value, key):
         if not value:
             return
-        if not isinstance(value, int) and len(value) < self.length:
+        try:
+            if not isinstance(value, int) and len(value) < self.length:
+                raise ValidationException(
+                    '{0}: This value should '
+                    'have a length greater than '
+                    '{1}. Currently {2}'.format(key, self.length, value)
+                )
+        except TypeError:
             raise ValidationException(
                 '{0}: This value should '
                 'have a length greater than '
-                '{1}. Currently {2}'.format(key, self.length, value)
+                '{1}. Currently unknown'.format(key, self.length)
             )
 
 
