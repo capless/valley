@@ -7,8 +7,8 @@ class BaseSchema(object):
     """
     Base class for all Kev Documents classes.
     """
-    is_valid = False
-    create_error_dict = False
+    _is_valid = False
+    _create_error_dict = False
 
     def __init__(self, **kwargs):
         self._data = self.process_schema_kwargs(kwargs)
@@ -57,13 +57,16 @@ class BaseSchema(object):
                     prop_validate(data.get(key))
             except ValidationException as e:
 
-                if self.create_error_dict:
+                if self._create_error_dict:
                     self._errors[key] = e.error_msg
                 else:
                     raise e
             value = prop.get_python_value(data.get(key))
             data[key] = value
-        self.is_valid = True
+        if self._create_error_dict and len(self._errors) < 1:
+            self._is_valid = True
+        else:
+            self._is_valid = False
         self.cleaned_data = data
 
     @classmethod

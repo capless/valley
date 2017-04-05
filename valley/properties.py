@@ -11,11 +11,13 @@ class BaseProperty(VariableMixin, object):
         default_value=None,
         required=False,
         validators=[],
+        choices=None,
         verbose_name=None,
         **kwargs
     ):
         self.default_value = default_value
         self.required = required
+        self.choices = choices
         self.kwargs = kwargs
         self.validators = list()
         self.get_validators()
@@ -115,4 +117,3 @@ class DateTimeProperty(DateTimeMixin, BaseProperty):
             **kwargs)
         self.auto_now = auto_now
         self.auto_now_add = auto_now_add
-

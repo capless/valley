@@ -6,12 +6,12 @@ import six
 
 from valley.exceptions import ValidationException
 from .validators import (RequiredValidator, StringValidator,
-                MaxLengthValidator, MinLengthValidator,
-                IntegerValidator, MaxValueValidator,
-                MinValueValidator, FloatValidator,
-                DateValidator, DateTimeValidator, BooleanValidator,
-                SlugValidator,EmailValidator
-                         )
+                         MaxLengthValidator, MinLengthValidator,
+                         IntegerValidator, MaxValueValidator,
+                         MinValueValidator, FloatValidator,
+                         DateValidator, DateTimeValidator, BooleanValidator,
+                         SlugValidator, EmailValidator,
+                         ChoiceValidator)
 
 
 class VariableMixin(object):
@@ -19,6 +19,8 @@ class VariableMixin(object):
     def get_validators(self):
         if self.required:
             self.validators.insert(0, RequiredValidator())
+        if self.choices:
+            self.validators.insert(0, ChoiceValidator(self.choices))
 
     def validate(self, value, key):
         if not value and not isinstance(self.get_default_value(), type(None)):

@@ -10,7 +10,7 @@ from valley.properties import CharProperty, EmailProperty, SlugProperty, \
 
 
 class Student(Schema):
-    create_error_dict = True
+    _create_error_dict = True
     name = CharProperty(required=True,min_length=5,max_length=20)
     slug = SlugProperty(required=True,min_length=5,max_length=25)
     email = EmailProperty(required=True)
@@ -21,7 +21,7 @@ class Student(Schema):
 
 
 class StudentB(Student):
-    create_error_dict = False
+    _create_error_dict = False
 
 
 class SchemaTestCase(unittest.TestCase):

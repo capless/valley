@@ -220,3 +220,17 @@ class BooleanValidator(Validator):
             raise ValidationException(
                 '{0}: This value should be True or False.'.format(key)
             )
+
+
+class ChoiceValidator(Validator):
+
+    def __init__(self,choices):
+        self.choices = choices
+
+    def validate(self, value, key):
+        if value:
+            if not value in self.choices.values():
+                raise ValidationException(
+                    '{0}: This value should is outside '
+                    'of the specified choices.'.format(key)
+                )
