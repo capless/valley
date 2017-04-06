@@ -231,6 +231,26 @@ class ChoiceValidator(Validator):
         if value:
             if not value in self.choices.values():
                 raise ValidationException(
-                    '{0}: This value should is outside '
+                    '{0}: This value is outside '
                     'of the specified choices.'.format(key)
+                )
+
+
+class DictValidator(Validator):
+
+    def validate(self, value, key):
+        if value:
+            if not isinstance(value,dict):
+                raise ValidationException(
+                    '{0}: This value should be a dict object.'.format(key)
+                )
+
+
+class ListValidator(Validator):
+
+    def validate(self, value, key):
+        if value:
+            if not isinstance(value,list):
+                raise ValidationException(
+                    '{0}: This value should be a list object.'.format(key)
                 )

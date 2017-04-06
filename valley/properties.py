@@ -1,6 +1,7 @@
 from valley.mixins import VariableMixin, CharVariableMixin, \
     IntegerVariableMixin, FloatVariableMixin, BooleanMixin, \
-    DateMixin, DateTimeMixin, SlugVariableMixin, EmailVariableMixin
+    DateMixin, DateTimeMixin, SlugVariableMixin, EmailVariableMixin, \
+    DictMixin, ListMixin
 
 
 
@@ -117,3 +118,11 @@ class DateTimeProperty(DateTimeMixin, BaseProperty):
             **kwargs)
         self.auto_now = auto_now
         self.auto_now_add = auto_now_add
+
+
+class DictProperty(DictMixin, BaseProperty):
+    pass
+
+
+class ListProperty(ListMixin, BaseProperty):
+    pass
