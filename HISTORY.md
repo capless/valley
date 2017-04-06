@@ -25,3 +25,7 @@
 
 - Added ListProperty
 - Added DictProperty
+
+## 1.2.1
+
+- Fixed bugs in ListMixin and DictMixin
