@@ -20,3 +20,8 @@
 - Added ChoiceValidator
 - Changed the name of create_error_dict and is_valid to _is_valid and _create_error_dict
 - Fixed _create_error_dict logic in validate
+
+## 1.2.0
+
+- Added ListProperty
+- Added DictProperty
