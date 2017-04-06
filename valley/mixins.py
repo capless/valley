@@ -219,6 +219,8 @@ class DictMixin(VariableMixin):
         return json.dumps(value)
 
     def get_python_value(self, value):
+        if not value:
+            return None
         try:
             return json.loads(value)
         except TypeError:
@@ -235,6 +237,8 @@ class ListMixin(VariableMixin):
         return json.dumps(value)
 
     def get_python_value(self, value):
+        if not value:
+            return None
         try:
             return json.loads(value)
         except TypeError:
