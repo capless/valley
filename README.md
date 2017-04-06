@@ -57,7 +57,7 @@ class DeclarativeVariablesMetaclass(DVM):
 
 
 class Schema(with_metaclass(DeclarativeVariablesMetaclass, BaseSchema)):
-    create_error_dict = False
+    _create_error_dict = False
     BUILTIN_DOC_ATTRS = []
     
 #If you just want to build upon an existing schema use valley.contrib.Schema
