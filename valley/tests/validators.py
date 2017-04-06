@@ -5,7 +5,8 @@ from valley.validators import (RequiredValidator, DateTimeValidator,
                             MaxLengthValidator, MinLengthValidator,
                             MaxValueValidator, MinValueValidator,
                             StringValidator, ValidationException,
-                            BooleanValidator
+                            BooleanValidator,DictValidator,
+                            ListValidator
                             )
 
 
@@ -99,6 +100,21 @@ class ValidatorsTestCase(unittest.TestCase):
         # Test with valid input
         BooleanValidator().validate(True, 'last_name')
         BooleanValidator().validate(False, 'last_name')
+
+    def test_dict_validator(self):
+        with self.assertRaises(ValidationException) as vm:
+            DictValidator().validate(1, 'person')
+        self.assertEqual(str(vm.exception),
+                         'person: This value should be a dict object.')
+        DictValidator().validate({'first':'Brian','last':'Jones'}, 'person')
+
+    def test_list_validator(self):
+        with self.assertRaises(ValidationException) as vm:
+            ListValidator().validate(1, 'schools')
+        self.assertEqual(str(vm.exception),
+                         'schools: This value should be a list object.')
+        ListValidator().validate(['Ridge Valley High','Lewis Cone Elementary'],'schools')
+
 
 if __name__ == '__main__':
     unittest.main()

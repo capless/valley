@@ -1,8 +1,8 @@
 import collections
-
 import datetime
-import time
+import json
 import six
+import time
 
 from valley.exceptions import ValidationException
 from .validators import (RequiredValidator, StringValidator,
@@ -10,8 +10,8 @@ from .validators import (RequiredValidator, StringValidator,
                          IntegerValidator, MaxValueValidator,
                          MinValueValidator, FloatValidator,
                          DateValidator, DateTimeValidator, BooleanValidator,
-                         SlugValidator, EmailValidator,
-                         ChoiceValidator)
+                         SlugValidator, EmailValidator,DictValidator,
+                         ChoiceValidator,ListValidator)
 
 
 class VariableMixin(object):
@@ -120,6 +120,7 @@ class FloatVariableMixin(NumericVariableMixin):
             return None
         return float(value)
 
+
 class DateMixin(VariableMixin):
 
     def get_validators(self):
@@ -190,7 +191,6 @@ class DateTimeMixin(VariableMixin):
         return datetime.datetime.utcnow()
 
 
-
 class BooleanMixin(VariableMixin):
 
     def get_validators(self):
@@ -207,3 +207,35 @@ class BooleanMixin(VariableMixin):
         except ValidationException:
             return value
         return bool(value)
+
+
+class DictMixin(VariableMixin):
+
+    def get_validators(self):
+        super(DictMixin, self).get_validators()
+        self.validators.insert(0, DictValidator())
+
+    def get_db_value(self, value):
+        return json.dumps(value)
+
+    def get_python_value(self, value):
+        try:
+            return json.loads(value)
+        except TypeError:
+            return dict(value)
+
+
+class ListMixin(VariableMixin):
+
+    def get_validators(self):
+        super(ListMixin, self).get_validators()
+        self.validators.insert(0, DictValidator())
+
+    def get_db_value(self, value):
+        return json.dumps(value)
+
+    def get_python_value(self, value):
+        try:
+            return json.loads(value)
+        except TypeError:
+            return list(value)
