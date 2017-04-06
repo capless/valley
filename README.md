@@ -266,3 +266,38 @@ active.validate('2017-03-03 12:00:00','Active')
 - Validators from BaseProperty
 - DateTimeValidator
 
+#### DictProperty
+
+Validates that the input is a dict object. 
+
+##### Example
+
+```python
+from valley.properties import DictProperty
+
+person = DictProperty(required=True)
+person.validate({'first':'Eddie','last':'Murphy'},'First Name')
+```
+
+##### Default Validators
+
+- Validators from BaseProperty
+- DictValidator
+
+#### ListProperty
+
+Validates that the input is a list object. 
+
+##### Example
+
+```python
+from valley.properties import ListProperty
+
+schools = ListProperty(required=True)
+schools.validate(['Jones School','Edwards School'],'Schools')
+```
+
+##### Default Validators
+
+- Validators from BaseProperty
+- ListValidator
