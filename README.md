@@ -1,3 +1,5 @@
+![alt text](https://s3.amazonaws.com/capless/images/valley-small.png "Valley - Extensible Schema Validations and Declarative Syntax Helpers")
+
 # Valley
 
 Python extensible schema validations and declarative syntax helpers.
@@ -22,7 +24,6 @@ frog = Animal(name='Kermit',species='frog',color='green',meal='carnivore',age=1)
 frog.validate()
 ```
 
-- [Library Comparison](https://github.com/capless/valley/blob/master/notebooks/valley-vs-schema-vs-schematics.ipynb) - **Valley** vs **Schema** vs **Schematics**
 - [Projects using Valley](#projects-using-valley)
 - [Schema and Declarative Syntax Helpers](#schema-and-declarative-syntax-helpers)
 - [Properties](#properties)
