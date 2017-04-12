@@ -24,7 +24,6 @@ frog = Animal(name='Kermit',species='frog',color='green',meal='carnivore',age=1)
 frog.validate()
 ```
 
-- [Library Comparison](https://github.com/capless/valley/blob/master/notebooks/valley-vs-schema-vs-schematics.ipynb) - **Valley** vs **Schema** vs **Schematics**
 - [Projects using Valley](#projects-using-valley)
 - [Schema and Declarative Syntax Helpers](#schema-and-declarative-syntax-helpers)
 - [Properties](#properties)
