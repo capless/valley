@@ -1,3 +1,5 @@
+![alt text](https://s3.amazonaws.com/capless/images/valley-small.png "Valley - Extensible Schema Validations and Declarative Syntax Helpers")
+
 # Valley
 
 Python extensible schema validations and declarative syntax helpers.
