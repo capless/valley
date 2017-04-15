@@ -5,7 +5,7 @@ from valley.exceptions import ValidationException
 
 class BaseSchema(object):
     """
-    Base class for all Kev Documents classes.
+    Base class for all Valley Schema classes.
     """
     _is_valid = False
     _create_error_dict = False

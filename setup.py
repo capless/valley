@@ -34,5 +34,4 @@ setup(
     license='GNU GPL V3',
     install_requires=[str(ir.req) for ir in install_reqs],
     include_package_data=True,
-    zip_safe=False,
 )
