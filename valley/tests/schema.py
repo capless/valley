@@ -1,6 +1,5 @@
 import unittest
 
-import six
 
 from valley.contrib import Schema
 from valley.exceptions import ValidationException

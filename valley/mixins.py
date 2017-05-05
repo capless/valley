@@ -1,7 +1,6 @@
 import collections
 import datetime
 import json
-import six
 import time
 
 from valley.exceptions import ValidationException
@@ -139,7 +138,7 @@ class DateMixin(VariableMixin):
     def get_python_value(self, value):
         if not value:
             return None
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             try:
                 value = datetime.date(*time.strptime(value, '%Y-%m-%d')[:3])
             except ValueError as e:
@@ -166,7 +165,7 @@ class DateTimeMixin(VariableMixin):
         return default
 
     def get_python_value(self, value):
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             try:
                 value = value.split('.', 1)[0]  # strip out microseconds
                 value = value[0:19]  # remove timezone

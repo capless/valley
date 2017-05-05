@@ -1,7 +1,7 @@
 import datetime
 import re
 import time
-import six
+
 
 from .exceptions import ValidationException
 
@@ -49,7 +49,7 @@ class StringValidator(Validator):
     def validate(self, value, key=None):
         if not value:
             return
-        if value and not isinstance(value, six.string_types):
+        if value and not isinstance(value, str):
             raise ValidationException(
                 '{0}: This value should '
                 'be a string'.format(key)
@@ -88,7 +88,7 @@ class DateValidator(Validator):
     def validate(self, value, key=None):
         if not value:
             return
-        if value and isinstance(value, six.string_types):
+        if value and isinstance(value, str):
             try:
                 value = datetime.date(*time.strptime(value, '%Y-%m-%d')[:3])
             except ValueError:
@@ -103,7 +103,7 @@ class DateTimeValidator(Validator):
     def validate(self, value, key=None):
         if not value:
             return
-        if value and isinstance(value, six.string_types):
+        if value and isinstance(value, str):
             try:
                 value = value.split('.', 1)[0]  # strip out microseconds
                 value = value[0:19]  # remove timezone
