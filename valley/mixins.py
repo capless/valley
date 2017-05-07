@@ -199,13 +199,15 @@ class BooleanMixin(VariableMixin):
         return bool(value)
 
     def get_python_value(self, value):
-        if not value:
-            return False
-        try:
-            BooleanValidator().validate(value, 'boolean')
-        except ValidationException:
-            return value
-        return bool(value)
+        true_vals = ('True', 'true', 1, '1')
+        false_vals = ('False', 'false', 0, '0')
+        if value in true_vals:
+            value = True
+        elif value in false_vals:
+            value = False
+        else:
+            raise ValueError('This value is not a boolean value.')
+        return value
 
 
 class DictMixin(VariableMixin):
