@@ -111,7 +111,7 @@ Base class that all of the following properties are subclassed from.
 
 #### CharProperty
 
-Validates that the input is a string type. More specifically it checks `six.string_types`
+Validates that the input is a string type. 
 
 ##### Example
 

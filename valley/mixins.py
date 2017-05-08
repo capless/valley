@@ -1,7 +1,6 @@
 import collections
 import datetime
 import json
-import six
 import time
 
 from valley.exceptions import ValidationException
@@ -139,7 +138,7 @@ class DateMixin(VariableMixin):
     def get_python_value(self, value):
         if not value:
             return None
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             try:
                 value = datetime.date(*time.strptime(value, '%Y-%m-%d')[:3])
             except ValueError as e:
@@ -166,7 +165,7 @@ class DateTimeMixin(VariableMixin):
         return default
 
     def get_python_value(self, value):
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             try:
                 value = value.split('.', 1)[0]  # strip out microseconds
                 value = value[0:19]  # remove timezone
@@ -200,13 +199,15 @@ class BooleanMixin(VariableMixin):
         return bool(value)
 
     def get_python_value(self, value):
-        if not value:
-            return False
-        try:
-            BooleanValidator().validate(value, 'boolean')
-        except ValidationException:
-            return value
-        return bool(value)
+        true_vals = ('True', 'true', 1, '1')
+        false_vals = ('False', 'false', 0, '0')
+        if value in true_vals:
+            value = True
+        elif value in false_vals:
+            value = False
+        else:
+            raise ValueError('This value is not a boolean value.')
+        return value
 
 
 class DictMixin(VariableMixin):

@@ -1,14 +1,4 @@
-import sys
 import importlib
-
-
-def import_mod(imp):
-    '''
-    Lazily imports a module from a string
-    @param imp:
-    '''
-    __import__(imp, globals(), locals())
-    return sys.modules[imp]
 
 
 def import_util(imp):

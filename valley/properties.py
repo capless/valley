@@ -27,26 +27,6 @@ class BaseProperty(VariableMixin, object):
             self.verbose_name = verbose_name
 
 
-class OrderedBaseProperty(BaseProperty):
-    _creation_counter = 0
-
-    def __init__(
-            self,
-            default_value=None,
-            required=False,
-            validators=[],
-            verbose_name=None,
-            **kwargs
-    ):
-        super(OrderedBaseProperty, self).__init__(default_value=default_value,
-                                                  required=required,
-                                                  validators=validators,
-                                                  verbose_name=verbose_name,
-                                                  **kwargs)
-        self._creation_counter = OrderedBaseProperty._creation_counter
-        OrderedBaseProperty._creation_counter += 1
-
-
 class CharProperty(CharVariableMixin, BaseProperty):
     pass
 
