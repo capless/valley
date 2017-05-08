@@ -56,7 +56,7 @@ class ValidatorsTestCase(unittest.TestCase):
         with self.assertRaises(ValidationException) as vm:
             MaxLengthValidator(2).validate('123', 'no_packages')
         self.assertEqual(str(vm.exception),
-                         'no_packages: This value should have a length lesser than 2. Currently 123')
+                         'no_packages: This value should have a length lesser than or equal to 2. Currently 123')
         # Test with valid input
         MaxLengthValidator(2).validate('12', 'no_packages')
 
@@ -64,7 +64,7 @@ class ValidatorsTestCase(unittest.TestCase):
         with self.assertRaises(ValidationException) as vm:
             MinLengthValidator(2).validate('1', 'no_packages')
         self.assertEqual(str(vm.exception),
-                         'no_packages: This value should have a length greater than 2. Currently 1')
+                         'no_packages: This value should have a length greater than or equal to 2. Currently 1')
         # Test with valid input
         MinLengthValidator(2).validate('123', 'no_packages')
 
@@ -72,7 +72,7 @@ class ValidatorsTestCase(unittest.TestCase):
         with self.assertRaises(ValidationException) as vm:
             MaxValueValidator(2).validate(3, 'no_packages')
         self.assertEqual(str(vm.exception),
-                         'no_packages: This value should have a value lesser than 2. Currently 3')
+                         'no_packages: This value should have a value lesser than or equal to 2. Currently 3')
         # Test with valid input
         MaxValueValidator(2).validate(1, 'no_packages')
 
@@ -80,7 +80,7 @@ class ValidatorsTestCase(unittest.TestCase):
         with self.assertRaises(ValidationException) as vm:
             MinValueValidator(2).validate(1, 'no_packages')
         self.assertEqual(str(vm.exception),
-                         'no_packages: This value should have a value greater than 2. Currently 1')
+                         'no_packages: This value should have a value greater than or equal to 2. Currently 1')
         # Test with valid input
         MinValueValidator(2).validate(3, 'no_packages')
 
