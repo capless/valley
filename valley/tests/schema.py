@@ -38,7 +38,7 @@ class SchemaTestCase(unittest.TestCase):
     def test_long_name(self):
         self.student.name = 'Frank Lindsay Hightower III'
         self.student.validate()
-        ed = {'name': 'name: This value should have a length lesser than 20. '
+        ed = {'name': 'name: This value should have a length lesser than or equal to 20. '
                       'Currently Frank Lindsay Hightower III'}
         self.assertDictEqual(ed, self.student._errors)
 
@@ -46,7 +46,7 @@ class SchemaTestCase(unittest.TestCase):
         self.student.name = 'Ira'
         self.student.validate()
         ed = {'name': 'name: This value should have a length greater '
-                      'than 5. Currently Ira'}
+                      'than or equal to 5. Currently Ira'}
         self.assertDictEqual(ed,self.student._errors)
 
     def test_no_name(self):
