@@ -176,13 +176,13 @@ class MaxLengthValidator(Validator):
             if not isinstance(value, int) and len(value) > self.length:
                 raise ValidationException(
                     '{0}: This value should '
-                    'have a length lesser than '
+                    'have a length lesser than or equal to '
                     '{1}. Currently {2}'.format(key, self.length, value)
                 )
         except TypeError:
             raise ValidationException(
                 '{0}: This value should '
-                'have a length lesser than '
+                'have a length lesser than or equal to '
                 '{1}. Currently unknown'.format(key, self.length)
             )
 
@@ -196,13 +196,13 @@ class MinLengthValidator(MaxLengthValidator):
             if not isinstance(value, int) and len(value) < self.length:
                 raise ValidationException(
                     '{0}: This value should '
-                    'have a length greater than '
+                    'have a length greater than or equal to '
                     '{1}. Currently {2}'.format(key, self.length, value)
                 )
         except TypeError:
             raise ValidationException(
                 '{0}: This value should '
-                'have a length greater than '
+                'have a length greater than or equal to'
                 '{1}. Currently unknown'.format(key, self.length)
             )
 
