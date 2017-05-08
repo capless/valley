@@ -20,27 +20,6 @@ class DeclaredVars(object):
         return properties
 
 
-class OrderedDeclaredVars(DeclaredVars):
-
-    def get_base_fields(self,bases, attrs):
-
-        properties = collections.OrderedDict(
-            sorted(
-                filter(lambda x: isinstance(x[1],self.base_field_class),
-                attrs.items()
-                       ),
-                key=lambda x: x[1]._creation_counter))
-
-        p_update = properties.update
-
-        for base in bases:
-            if hasattr(base, '_base_properties'):
-                bft = base._base_properties
-                if len(bft) > 0:
-                    p_update(bft)
-
-        return properties
-
 class DeclarativeVariablesMetaclass(type):
 
     declared_vars_class = None
@@ -51,3 +30,7 @@ class DeclarativeVariablesMetaclass(type):
                           cls).__new__(cls, name, bases, attrs)
 
         return new_class
+
+    @classmethod
+    def __prepare__(mcls, cls, bases):
+        return collections.OrderedDict()

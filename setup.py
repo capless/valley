@@ -3,7 +3,7 @@ from pip.req import parse_requirements
 
 install_reqs = parse_requirements('requirements.txt', session=False)
 
-version = '1.2.1'
+version = '1.3.0'
 
 LONG_DESCRIPTION = """
 =======================
@@ -34,5 +34,4 @@ setup(
     license='GNU GPL V3',
     install_requires=[str(ir.req) for ir in install_reqs],
     include_package_data=True,
-    zip_safe=False,
 )
