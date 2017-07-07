@@ -24,16 +24,20 @@ frog = Animal(name='Kermit',species='frog',color='green',meal='carnivore',age=1)
 frog.validate()
 ```
 
+#### Python Versions
+
+Python 3.6+
+
 - [Projects using Valley](#projects-using-valley)
 - [Schema and Declarative Syntax Helpers](#schema-and-declarative-syntax-helpers)
 - [Properties](#properties)
-
-
+- [JSON Encoders and Decoder](#json-encoders-and-decoder)
 
 ### Projects Using Valley
 
 - [kev](https://github.com/capless/kev) - **K.E.V.** (Keys, Extra Stuff, and Values) is a Python ORM for key-value stores. Currently supported backends are Redis, S3, DynamoDB, and a S3/Redis hybrid backend.
 - [formy](https://github.com/capless/formy) - **Formy** is a Python forms library with Jinja2 templates
+
 
 ### Schema and Declarative Syntax Helpers
 
@@ -344,7 +348,7 @@ terrible_schools.validate([School(name='UNC'),School(name='Howard')],'Terrible S
 - ForeignListValidator
 
 
-### JSON Encoder and Decoder
+### JSON Encoders and Decoder
 
 #### ValleyEncoder
 
