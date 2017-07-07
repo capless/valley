@@ -1,8 +1,7 @@
 from valley.mixins import VariableMixin, CharVariableMixin, \
     IntegerVariableMixin, FloatVariableMixin, BooleanMixin, \
     DateMixin, DateTimeMixin, SlugVariableMixin, EmailVariableMixin, \
-    DictMixin, ListMixin
-
+    DictMixin, ListMixin, ForeignMixin, ForeignListMixin
 
 
 class BaseProperty(VariableMixin, object):
@@ -106,3 +105,21 @@ class DictProperty(DictMixin, BaseProperty):
 
 class ListProperty(ListMixin, BaseProperty):
     pass
+
+
+class ForeignProperty(ForeignMixin, BaseProperty):
+
+    def __init__(self,foreign_class,return_type=None,return_prop=None,**kwargs):
+        self.foreign_class = foreign_class
+        super(ForeignProperty, self).__init__(**kwargs)
+        self.return_type = return_type
+        self.return_prop = return_prop
+
+
+class ForeignListProperty(ForeignListMixin, BaseProperty):
+
+    def __init__(self,foreign_class,return_type=None,return_prop=None,**kwargs):
+        self.foreign_class = foreign_class
+        super(ForeignListProperty, self).__init__(**kwargs)
+        self.return_type = return_type
+        self.return_prop = return_prop

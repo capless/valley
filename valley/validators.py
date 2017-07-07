@@ -16,6 +16,10 @@ __all__ = [
     "MaxLengthValidator",
     "DateValidator",
     "DateTimeValidator",
+    "BooleanValidator",
+    "ChoiceValidator",
+    "DictValidator",
+    "ListValidator"
 ]
 
 #Credit to the Django project
@@ -248,3 +252,27 @@ class ListValidator(Validator):
                 raise ValidationException(
                     '{0}: This value should be a list object.'.format(key)
                 )
+
+class ForeignValidator(Validator):
+
+    def __init__(self, foreign_class):
+        self.foreign_class = foreign_class
+
+    def validate(self, value, key):
+        if value:
+            if not isinstance(value,self.foreign_class):
+                raise ValidationException('{0}: This value ({1}) should be an instance of {2}.'.format(
+                    key, value, self.foreign_class.__name__))
+
+
+class ForeignListValidator(ForeignValidator):
+
+    def validate(self, value, key):
+        if value:
+            for obj in value:
+                if not isinstance(obj,self.foreign_class):
+                    raise ValidationException(
+                        '{0}: This value ({1}) should be an instance of {2}.'.format(
+                            key, obj, self.foreign_class.__name__)
+                    )
+

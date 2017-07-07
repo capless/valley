@@ -4,13 +4,14 @@ import json
 import time
 
 from valley.exceptions import ValidationException
+from valley.utils.json_utils import ValleyEncoder
 from .validators import (RequiredValidator, StringValidator,
                          MaxLengthValidator, MinLengthValidator,
                          IntegerValidator, MaxValueValidator,
                          MinValueValidator, FloatValidator,
                          DateValidator, DateTimeValidator, BooleanValidator,
-                         SlugValidator, EmailValidator,DictValidator,
-                         ChoiceValidator,ListValidator)
+                         SlugValidator, EmailValidator, DictValidator,
+                         ChoiceValidator, ListValidator, ForeignValidator, ForeignListValidator)
 
 
 class VariableMixin(object):
@@ -232,7 +233,7 @@ class ListMixin(VariableMixin):
 
     def get_validators(self):
         super(ListMixin, self).get_validators()
-        self.validators.insert(0, DictValidator())
+        self.validators.insert(0, ListValidator())
 
     def get_db_value(self, value):
         return json.dumps(value)
@@ -243,4 +244,48 @@ class ListMixin(VariableMixin):
         try:
             return json.loads(value)
         except TypeError:
-            return list(value)
+            try:
+                return list(value)
+            except TypeError:
+                return value
+
+
+class ForeignMixin(VariableMixin):
+
+    def get_validators(self):
+        super(ForeignMixin, self).get_validators()
+        self.validators.insert(0, ForeignValidator(self.foreign_class))
+
+    def get_db_value(self, value):
+        if self.return_type == 'single':
+            if not self.return_prop:
+                raise ValueError('ForeignProperty classes requires the '
+                    'return_prop argument if return_type equals "single"')
+            return value._data[self.return_prop]
+        if self.return_type == 'dict':
+            return value._data
+        if self.return_type == 'json':
+            return json.dumps(value, cls=ValleyEncoder)
+        else:
+            return value
+
+
+class ForeignListMixin(ListMixin):
+
+    def get_validators(self):
+        super(ForeignListMixin, self).get_validators()
+        self.validators.insert(len(self.validators),ForeignListValidator(self.foreign_class))
+
+    def get_db_value(self, value):
+        if self.return_type == 'single':
+            if not self.return_prop:
+                raise ValueError('ForeignProperty classes requires the '
+                    'return_prop argument if return_type equals "single"')
+            return value._data[self.return_prop]
+        if self.return_type == 'list':
+            return [obj._data for obj in value]
+        if self.return_type == 'json':
+            return json.dumps(value, cls=ValleyEncoder)
+        else:
+            return value
+

@@ -1,4 +1,5 @@
 import collections
+import json
 
 from valley.exceptions import ValidationException
 
@@ -72,4 +73,8 @@ class BaseSchema(object):
     @classmethod
     def get_class_name(cls):
         return cls.__name__.lower()
+
+    def to_json(self):
+        return json.dumps(self._data)
+
 
