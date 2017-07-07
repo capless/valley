@@ -5,11 +5,18 @@ from .imports import import_util
 
 
 class ValleyEncoder(json.JSONEncoder):
+    show_type = True
+
     def default(self, obj):
         if not isinstance(obj, (list,dict,int,float,bool)):
-            obj._data['_type'] = '{}.{}'.format(inspect.getmodule(obj).__name__, obj.__class__.__name__)
+            if self.show_type:
+                obj._data['_type'] = '{}.{}'.format(inspect.getmodule(obj).__name__, obj.__class__.__name__)
             return obj._data
         return super(ValleyEncoder, self).default(obj)
+
+
+class ValleyEncoderNoType(ValleyEncoder):
+    show_type = False
 
 
 class ValleyDecoder(json.JSONDecoder):
