@@ -302,3 +302,231 @@ schools.validate(['Jones School','Edwards School'],'Schools')
 
 - Validators from BaseProperty
 - ListValidator
+
+#### ForeignProperty
+
+Validates that the input is an instance of another class
+
+##### Example
+
+```python
+from valley.properties import ForeignProperty
+
+district = ForeignProperty(District,required=True)
+district.validate(District(name='Durham'),'District')
+```
+
+##### Default Validators
+
+- Validators from BaseProperty
+- ForeignValidator
+
+#### ForeignListProperty
+
+Validates that the input is an instance of another class
+
+##### Example
+
+```python
+from valley.properties import ForeignListProperty
+
+great_schools = ForeignListProperty(School,required=True)
+great_schools.validate([School(name='Duke'),School(name='Hampton University')],'Great Schools')
+#Go Duke
+terrible_schools = ForeignListProperty(School,required=True)
+terrible_schools.validate([School(name='UNC'),School(name='Howard')],'Terrible Schools')
+```
+
+##### Default Validators
+
+- Validators from BaseProperty
+- ListValidator
+- ForeignListValidator
+
+
+### JSON Encoder and Decoder
+
+#### ValleyEncoder
+
+Paired with the json.dumps it parses through Schema objects and returns valid json.
+
+##### Example
+
+```python
+import json
+from valley.utils.json_utils import ValleyEncoder
+from valley.contrib import Schema
+from valley.properties import *
+
+class NameSchema(Schema):
+    _create_error_dict = True
+    name = CharProperty(required=True)
+
+    def __unicode__(self):
+        return self.name
+
+
+class Breed(NameSchema):
+    pass
+
+
+class Dog(NameSchema):
+    breed = ForeignProperty(Breed,required=True)
+
+
+class Troop(NameSchema):
+    dogs = ForeignListProperty(Dog)
+    primary_breed = ForeignProperty(Breed)
+
+
+>>> cocker = Breed(name='Cocker Spaniel')
+
+>>> cockapoo = Breed(name='Cockapoo')
+
+>>> bruno = Dog(name='Bruno',breed=cocker)
+
+>>> blitz = Dog(name='Blitz',breed=cockapoo)
+
+>>> durham = Troop(name='Durham',dogs=[bruno,blitz],primary_breed=cocker)
+
+>>> print(json.dumps(durham, cls=ValleyEncoder))
+{
+  "dogs": [
+    {
+      "breed": {
+        "name": "Cocker Spaniel",
+        "_type": "valley.tests.examples.schemas.Breed"
+      },
+      "name": "Bruno",
+      "_type": "valley.tests.examples.schemas.Dog"
+    },
+    {
+      "breed": {
+        "name": "Cockapoo",
+        "_type": "valley.tests.examples.schemas.Breed"
+      },
+      "name": "Blitz",
+      "_type": "valley.tests.examples.schemas.Dog"
+    }
+  ],
+  "primary_breed": {
+    "name": "Cocker Spaniel",
+    "_type": "valley.tests.examples.schemas.Breed"
+  },
+  "name": "Durham",
+  "_type": "valley.tests.examples.schemas.Troop"
+}
+```
+
+#### ValleyEncoderNoType
+
+Same as ValleyEncoder except it doesn't add _type attributes.
+
+##### Example
+
+```python
+import json
+from valley.utils.json_utils import ValleyEncoderNoType
+from valley.contrib import Schema
+from valley.properties import *
+
+class NameSchema(Schema):
+    _create_error_dict = True
+    name = CharProperty(required=True)
+
+    def __unicode__(self):
+        return self.name
+
+
+class Breed(NameSchema):
+    pass
+
+
+class Dog(NameSchema):
+    breed = ForeignProperty(Breed,required=True)
+
+
+class Troop(NameSchema):
+    dogs = ForeignListProperty(Dog)
+    primary_breed = ForeignProperty(Breed)
+
+
+>>> cocker = Breed(name='Cocker Spaniel')
+
+>>> cockapoo = Breed(name='Cockapoo')
+
+>>> bruno = Dog(name='Bruno',breed=cocker)
+
+>>> blitz = Dog(name='Blitz',breed=cockapoo)
+
+>>> durham = Troop(name='Durham',dogs=[bruno,blitz],primary_breed=cocker)
+
+>>> print(json.dumps(durham, cls=ValleyEncoderNoType))
+{
+  "dogs": [
+    {
+      "breed": {
+        "name": "Cocker Spaniel"
+      },
+      "name": "Bruno"
+    },
+    {
+      "breed": {
+        "name": "Cockapoo"
+      },
+      "name": "Blitz"
+    }
+  ],
+  "primary_breed": {
+    "name": "Cocker Spaniel"
+  },
+  "name": "Durham"
+}
+```
+
+#### ValleyDecoder
+
+Paired with the json.loads it create Schema objects from json
+
+##### Example
+
+```python
+import json
+
+from valley.utils.json_utils import ValleyDecoder
+
+json_string = '{
+  "dogs": [
+    {
+      "breed": {
+        "name": "Cocker Spaniel",
+        "_type": "valley.tests.examples.schemas.Breed"
+      },
+      "name": "Bruno",
+      "_type": "valley.tests.examples.schemas.Dog"
+    },
+    {
+      "breed": {
+        "name": "Cockapoo",
+        "_type": "valley.tests.examples.schemas.Breed"
+      },
+      "name": "Blitz",
+      "_type": "valley.tests.examples.schemas.Dog"
+    }
+  ],
+  "primary_breed": {
+    "name": "Cocker Spaniel",
+    "_type": "valley.tests.examples.schemas.Breed"
+  },
+  "name": "Durham",
+  "_type": "valley.tests.examples.schemas.Troop"
+}'
+
+>>> durham = json.loads(json_string,cls=ValleyDecoder)
+<Troop: Durham >
+>>> durham.name
+'Durham
+>>> durham.primary_breed.name
+Cocker Spaniel
+
+```

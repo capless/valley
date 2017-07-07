@@ -29,3 +29,8 @@
 ## 1.2.1
 
 - Fixed bugs in ListMixin and DictMixin
+
+## 1.4.0
+
+- Added ValleyEncoder and ValleyDecoder
+- Added ForeignProperty and ForeignListProperty
