@@ -1,26 +1,9 @@
 import unittest
 
 
-from valley.contrib import Schema
+
 from valley.exceptions import ValidationException
-from valley.properties import CharProperty, EmailProperty, SlugProperty, \
-    IntegerProperty, FloatProperty, DateProperty, \
-    DateTimeProperty
-
-
-class Student(Schema):
-    _create_error_dict = True
-    name = CharProperty(required=True,min_length=5,max_length=20)
-    slug = SlugProperty(required=True,min_length=5,max_length=25)
-    email = EmailProperty(required=True)
-    age = IntegerProperty(min_value=5,max_value=18)
-    gpa = FloatProperty(min_value=0,max_value=4.5)
-    date = DateProperty(required=False)
-    datetime = DateTimeProperty(required=False)
-
-
-class StudentB(Student):
-    _create_error_dict = False
+from valley.tests.examples.schemas import StudentB, Student, durham, Troop, bruno, blitz, cocker
 
 
 class SchemaTestCase(unittest.TestCase):
@@ -32,8 +15,30 @@ class SchemaTestCase(unittest.TestCase):
                     datetime='2017-01-10T12:00:00'
                     )
 
+        self.troop = Troop(name='Durham',dogs=[bruno,blitz],
+                           primary_breed=cocker)
+
     def test_valid(self):
         self.student.validate()
+        self.assertDictEqual(self.student._errors, {})
+
+    def test_foreign_valid(self):
+        self.troop.validate()
+        self.assertDictEqual(self.troop._errors,{})
+
+    def test_foreign_property_wrong_type(self):
+        self.troop.primary_breed = 'Cocker'
+        self.troop.validate()
+        self.assertDictEqual({'primary_breed': 'primary_breed: This value '
+                                               '(Cocker) should be an instance of Breed.'},
+                             self.troop._errors)
+
+    def test_foreign_list_property_wrong_type(self):
+        self.troop.dogs = ['Test',bruno,blitz]
+        self.troop.validate()
+        self.assertDictEqual({'dogs': 'dogs: This value (Test) should '
+                                      'be an instance of Dog.'},
+                             self.troop._errors)
 
     def test_long_name(self):
         self.student.name = 'Frank Lindsay Hightower III'

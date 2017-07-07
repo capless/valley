@@ -7,6 +7,7 @@ valley.ipynb
 *.so
 *.idea
 # Distribution / packaging
+*.ipynb
 .Python
 env/
 build/
