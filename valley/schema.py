@@ -77,4 +77,5 @@ class BaseSchema(object):
     def to_json(self):
         return json.dumps(self._data)
 
-
+    def to_dict(self):
+        return self._data

@@ -9,9 +9,10 @@ class ValleyEncoder(json.JSONEncoder):
 
     def default(self, obj):
         if not isinstance(obj, (list,dict,int,float,bool)):
+            obj_dict = obj.to_dict()
             if self.show_type:
-                obj._data['_type'] = '{}.{}'.format(inspect.getmodule(obj).__name__, obj.__class__.__name__)
-            return obj._data
+                obj_dict['_type'] = '{}.{}'.format(inspect.getmodule(obj).__name__, obj.__class__.__name__)
+            return obj_dict
         return super(ValleyEncoder, self).default(obj)
 
 
