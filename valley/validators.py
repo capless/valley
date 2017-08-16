@@ -19,7 +19,9 @@ __all__ = [
     "BooleanValidator",
     "ChoiceValidator",
     "DictValidator",
-    "ListValidator"
+    "ListValidator",
+    "ForeignValidator",
+    "MultiValidator"
 ]
 
 #Credit to the Django project
@@ -276,3 +278,23 @@ class ForeignListValidator(ForeignValidator):
                             key, obj, self.foreign_class.__name__)
                     )
 
+
+class MultiValidator(Validator):
+
+    def __init__(self, validators):
+        self.validators = validators
+
+    def validate(self, value, key):
+        error_list = []
+        validator_cnt = len(self.validators)
+
+        for i in self.validators:
+            try:
+                i.validate(value,key)
+            except ValidationException as e:
+                error_list.append(e.error_msg)
+
+        if len(error_list) >= validator_cnt:
+            raise ValidationException(
+                '{0}: This value ({1}) did not pass the validators'.format(
+                    key,value))

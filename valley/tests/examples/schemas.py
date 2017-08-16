@@ -1,5 +1,6 @@
 from valley.contrib import Schema
 from valley.properties import *
+from valley.validators import *
 
 
 class Student(Schema):
@@ -26,6 +27,10 @@ class NameSchema(Schema):
 
 
 class Breed(NameSchema):
+    pass
+
+
+class Food(NameSchema):
     pass
 
 

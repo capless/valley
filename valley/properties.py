@@ -1,7 +1,7 @@
 from valley.mixins import VariableMixin, CharVariableMixin, \
     IntegerVariableMixin, FloatVariableMixin, BooleanMixin, \
     DateMixin, DateTimeMixin, SlugVariableMixin, EmailVariableMixin, \
-    DictMixin, ListMixin, ForeignMixin, ForeignListMixin
+    DictMixin, ListMixin, ForeignMixin, ForeignListMixin, MultiMixin
 
 
 class BaseProperty(VariableMixin, object):
@@ -19,9 +19,14 @@ class BaseProperty(VariableMixin, object):
         self.required = required
         self.choices = choices
         self.kwargs = kwargs
-        self.validators = list()
+        if isinstance(validators,list):
+            self.validators = list(set(validators))
+        else:
+            self.validators = []
+
         self.get_validators()
         self.validators = set(self.validators)
+
         if verbose_name:
             self.verbose_name = verbose_name
 
@@ -123,3 +128,10 @@ class ForeignListProperty(ForeignListMixin, BaseProperty):
         super(ForeignListProperty, self).__init__(**kwargs)
         self.return_type = return_type
         self.return_prop = return_prop
+
+
+class MultiProperty(MultiMixin,BaseProperty):
+
+    def validate(self, value, key):
+        super(MultiProperty, self).validate(value,key)
+        print(value,key)

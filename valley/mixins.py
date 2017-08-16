@@ -11,7 +11,8 @@ from .validators import (RequiredValidator, StringValidator,
                          MinValueValidator, FloatValidator,
                          DateValidator, DateTimeValidator, BooleanValidator,
                          SlugValidator, EmailValidator, DictValidator,
-                         ChoiceValidator, ListValidator, ForeignValidator, ForeignListValidator)
+                         ChoiceValidator, ListValidator, ForeignValidator,
+                         ForeignListValidator, MultiValidator)
 
 
 class VariableMixin(object):
@@ -288,4 +289,11 @@ class ForeignListMixin(ListMixin):
             return json.dumps(value, cls=ValleyEncoder)
         else:
             return value
+
+
+class MultiMixin(VariableMixin):
+
+    def get_validators(self):
+        super(MultiMixin, self).get_validators()
+        self.validators = [MultiValidator(self.validators)]
 
