@@ -34,3 +34,8 @@
 
 - Added ValleyEncoder and ValleyDecoder
 - Added ForeignProperty and ForeignListProperty
+
+## 1.5.0
+
+- Added MuliProperty
+- Fixed validators argument in BaseProperty
