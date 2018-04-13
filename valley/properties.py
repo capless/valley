@@ -1,11 +1,17 @@
+import logging
+
 from valley.mixins import VariableMixin, CharVariableMixin, \
     IntegerVariableMixin, FloatVariableMixin, BooleanMixin, \
     DateMixin, DateTimeMixin, SlugVariableMixin, EmailVariableMixin, \
     DictMixin, ListMixin, ForeignMixin, ForeignListMixin, MultiMixin
 
 
-class BaseProperty(VariableMixin, object):
+LOGGER = logging.getLogger('valley')
 
+
+class BaseProperty(VariableMixin, object):
+    default_value = None
+    allow_required = True
     def __init__(
         self,
         default_value=None,
@@ -15,8 +21,15 @@ class BaseProperty(VariableMixin, object):
         verbose_name=None,
         **kwargs
     ):
-        self.default_value = default_value
-        self.required = required
+        self.default_value = default_value or self.default_value
+        if self.allow_required == True:
+            self.required = required
+        else:
+            self.required = False
+            if required == True:
+                LOGGER.warning(
+                    'The required argument has no effect on {}'.format(
+                        self.__class__.__name__))
         self.choices = choices
         self.kwargs = kwargs
         if isinstance(validators,list):
@@ -52,8 +65,8 @@ class FloatProperty(FloatVariableMixin, BaseProperty):
 
 
 class BooleanProperty(BooleanMixin, BaseProperty):
-    pass
-
+    default_value = False
+    allow_required = False
 
 class DateProperty(DateMixin, BaseProperty):
 
@@ -134,4 +147,3 @@ class MultiProperty(MultiMixin,BaseProperty):
 
     def validate(self, value, key):
         super(MultiProperty, self).validate(value,key)
-        print(value,key)

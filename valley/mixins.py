@@ -201,8 +201,8 @@ class BooleanMixin(VariableMixin):
         return bool(value)
 
     def get_python_value(self, value):
-        true_vals = ('True', 'true', 1, '1')
-        false_vals = ('False', 'false', 0, '0')
+        true_vals = ('True', 'true', 1, '1',True)
+        false_vals = ('False', 'false', 0, '0',False)
         if value in true_vals:
             value = True
         elif value in false_vals:
