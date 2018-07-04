@@ -12,6 +12,7 @@ class Student(Schema):
     gpa = FloatProperty(min_value=0,max_value=4.5)
     date = DateProperty(required=False)
     datetime = DateTimeProperty(required=False)
+    active = BooleanProperty()
 
 
 class StudentB(Student):

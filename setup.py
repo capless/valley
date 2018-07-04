@@ -1,9 +1,12 @@
 from setuptools import setup, find_packages
-from pip.req import parse_requirements
 
-install_reqs = parse_requirements('requirements.txt', session=False)
 
-version = '1.5.1'
+def parse_requirements(filename):
+    """ load requirements from a pip requirements file """
+    lineiter = (line.strip() for line in open(filename))
+    return [line for line in lineiter if line and not line.startswith("#")]
+
+version = '1.5.2'
 
 LONG_DESCRIPTION = """
 =======================
@@ -32,6 +35,6 @@ setup(
     packages=find_packages(),
     url='https://github.com/capless/valley',
     license='GNU GPL V3',
-    install_requires=[str(ir.req) for ir in install_reqs],
+    install_requires=parse_requirements('requirements.txt'),
     include_package_data=True,
 )

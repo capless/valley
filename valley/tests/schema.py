@@ -12,7 +12,7 @@ class SchemaTestCase(unittest.TestCase):
         self.student = Student(name='Frank White',slug='frank-white',
                     email='frank@white.com',age=18,
                     gpa=3.0,date='2017-01-10',
-                    datetime='2017-01-10T12:00:00'
+                    datetime='2017-01-10T12:00:00',active=False
                     )
 
         self.troop = Troop(name='Durham',dogs=[bruno,blitz],
@@ -116,6 +116,7 @@ class SchemaMethods(unittest.TestCase):
         response = self.student.process_schema_kwargs({'name':1,'slug':1})
         self.assertEqual(response,{'name':'1','slug':'1','email':None,
                                    'age':None,'gpa':None,'date':None,
+                                   'active':False,
                                    'datetime':None})
 
     def test_error_dict_false_validate(self):
