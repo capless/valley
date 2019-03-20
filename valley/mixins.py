@@ -198,7 +198,7 @@ class BooleanMixin(VariableMixin):
         self.validators = [BooleanValidator()]
 
     def get_db_value(self, value):
-        return bool(value)
+        return self.get_python_value(value)
 
     def get_python_value(self, value):
         true_vals = ('True', 'true', 1, '1',True)
