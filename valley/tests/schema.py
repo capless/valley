@@ -20,15 +20,18 @@ class SchemaTestCase(unittest.TestCase):
 
     def test_valid(self):
         self.student.validate()
+        self.assertEqual(True, self.student._is_valid)
         self.assertDictEqual(self.student._errors, {})
 
     def test_foreign_valid(self):
         self.troop.validate()
+        self.assertEqual(True, self.troop._is_valid)
         self.assertDictEqual(self.troop._errors,{})
 
     def test_foreign_property_wrong_type(self):
         self.troop.primary_breed = 'Cocker'
         self.troop.validate()
+        self.assertEqual(False, self.troop._is_valid)
         self.assertDictEqual({'primary_breed': 'primary_breed: This value '
                                                '(Cocker) should be an instance of Breed.'},
                              self.troop._errors)
@@ -36,6 +39,7 @@ class SchemaTestCase(unittest.TestCase):
     def test_foreign_list_property_wrong_type(self):
         self.troop.dogs = ['Test',bruno,blitz]
         self.troop.validate()
+        self.assertEqual(False, self.troop._is_valid)
         self.assertDictEqual({'dogs': 'dogs: This value (Test) should '
                                       'be an instance of Dog.'},
                              self.troop._errors)
@@ -43,6 +47,7 @@ class SchemaTestCase(unittest.TestCase):
     def test_long_name(self):
         self.student.name = 'Frank Lindsay Hightower III'
         self.student.validate()
+        self.assertEqual(False, self.student._is_valid)
         ed = {'name': 'name: This value should have a length lesser than or equal to 20. '
                       'Currently Frank Lindsay Hightower III'}
         self.assertDictEqual(ed, self.student._errors)
@@ -57,6 +62,7 @@ class SchemaTestCase(unittest.TestCase):
     def test_no_name(self):
         self.student.name = None
         self.student.validate()
+        self.assertEqual(False, self.student._is_valid)
         ed = {'name': 'name: This value is required'}
         self.assertDictEqual(ed, self.student._errors)
 

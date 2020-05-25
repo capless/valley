@@ -64,7 +64,7 @@ class BaseSchema(object):
                     raise e
             value = prop.get_python_value(data.get(key))
             data[key] = value
-        if self._create_error_dict and len(self._errors) < 1:
+        if len(self._errors) < 1:
             self._is_valid = True
         else:
             self._is_valid = False

@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "valley"
+version = "1.5.5"
+description = "Python extensible schema validations and declarative syntax helpers."
+authors = ["Brian Jinwright"]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://github.com/capless/valley"
+repository = "https://github.com/capless/valley"
+classifiers = [
+        "Programming Language :: Python",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Environment :: Web Environment",
+    ]
+keywords=['validations,schema,declarative']
+
+[tool.poetry.dependencies]
+python = "^3.7"
+envs = "^1.3"
+
+[tool.poetry.dev-dependencies]
+jupyter = "^1.0.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
