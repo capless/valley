@@ -37,7 +37,7 @@ class BaseSchema(object):
         schema_obj = {}
         for key, prop in list(self._base_properties.items()):
             try:
-                value = prop.get_python_value(kwargs.get(key) or prop.get_default_value())
+                value = prop.get_python_value(prop.get_default_value() or kwargs.get(key))
             except ValueError:
                 value = kwargs.get(key) or prop.get_default_value()
 
