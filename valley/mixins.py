@@ -102,7 +102,7 @@ class IntegerVariableMixin(NumericVariableMixin):
         return int(value)
 
     def get_python_value(self, value):
-        if not value:
+        if value is None:
             return None
         return int(value)
 
@@ -117,7 +117,7 @@ class FloatVariableMixin(NumericVariableMixin):
         return float(value)
 
     def get_python_value(self, value):
-        if not value:
+        if value is None:
             return None
         return float(value)
 
