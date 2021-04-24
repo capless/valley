@@ -37,6 +37,8 @@ class VariableMixin(object):
         return default
 
     def get_db_value(self, value):
+        if not value:
+            return
         return value
 
     def get_python_value(self, value):
@@ -57,6 +59,8 @@ class CharVariableMixin(VariableMixin):
                 self.kwargs.get('max_length')))
 
     def get_db_value(self, value):
+        if not value:
+            return
         return str(value)
 
     def get_python_value(self, value):
@@ -99,11 +103,13 @@ class IntegerVariableMixin(NumericVariableMixin):
         self.validators.insert(0, IntegerValidator())
 
     def get_db_value(self, value):
+        if not value:
+            return
         return int(value)
 
     def get_python_value(self, value):
         if not value:
-            return None
+            return
         return int(value)
 
 
@@ -114,11 +120,13 @@ class FloatVariableMixin(NumericVariableMixin):
         self.validators.insert(0, FloatValidator())
 
     def get_db_value(self, value):
+        if not value:
+            return
         return float(value)
 
     def get_python_value(self, value):
         if not value:
-            return None
+            return
         return float(value)
 
 
@@ -139,7 +147,7 @@ class DateMixin(VariableMixin):
 
     def get_python_value(self, value):
         if not value:
-            return None
+            return
         if isinstance(value, str):
             try:
                 value = datetime.date(*time.strptime(value, '%Y-%m-%d')[:3])
@@ -149,8 +157,8 @@ class DateMixin(VariableMixin):
         return value
 
     def get_db_value(self, value):
-        if value is None:
-            return value
+        if not value:
+            return
         return value.isoformat()
 
 
@@ -167,6 +175,8 @@ class DateTimeMixin(VariableMixin):
         return default
 
     def get_python_value(self, value):
+        if not value:
+            return
         if isinstance(value, str):
             try:
                 value = value.split('.', 1)[0]  # strip out microseconds
@@ -198,6 +208,8 @@ class BooleanMixin(VariableMixin):
         self.validators = [BooleanValidator()]
 
     def get_db_value(self, value):
+        if value == None:
+            return
         return self.get_python_value(value)
 
     def get_python_value(self, value):
@@ -219,6 +231,8 @@ class DictMixin(VariableMixin):
         self.validators.insert(0, DictValidator())
 
     def get_db_value(self, value):
+        if not value:
+            return
         return json.dumps(value)
 
     def get_python_value(self, value):
@@ -237,6 +251,8 @@ class ListMixin(VariableMixin):
         self.validators.insert(0, ListValidator())
 
     def get_db_value(self, value):
+        if not value:
+            return
         return json.dumps(value)
 
     def get_python_value(self, value):
@@ -258,6 +274,8 @@ class ForeignMixin(VariableMixin):
         self.validators.insert(0, ForeignValidator(self.foreign_class))
 
     def get_db_value(self, value):
+        if not value:
+            return
         if self.return_type == 'single':
             if not self.return_prop:
                 raise ValueError('ForeignProperty classes requires the '
@@ -278,6 +296,8 @@ class ForeignListMixin(ListMixin):
         self.validators.insert(len(self.validators),ForeignListValidator(self.foreign_class))
 
     def get_db_value(self, value):
+        if not value:
+            return
         if self.return_type == 'single':
             if not self.return_prop:
                 raise ValueError('ForeignProperty classes requires the '
