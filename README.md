@@ -4,7 +4,7 @@
 
 Python extensible schema validations and declarative syntax helpers.
 
-[![Build Status](https://travis-ci.org/capless/valley.svg?branch=master)](https://travis-ci.org/capless/valley)
+[![Unittests](https://github.com/capless/valley/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/capless/valley/actions/workflows/main.yml)
 
 ## Installation
 
