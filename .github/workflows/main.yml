@@ -43,8 +43,8 @@ jobs:
         run: docker-compose run web poetry run python -m unittest
 
       - name: Publish to PyPi
+        if: github.ref == 'refs/heads/master'
         env:
           PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
           PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        if: github.ref == 'refs/heads/master'
         run: docker-compose run web poetry build && docker-compose run web poetry publish --username=$PYPI_USERNAME --password=$PYPI_PASSWORD
