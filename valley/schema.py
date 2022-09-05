@@ -1,4 +1,4 @@
-import collections
+from collections.abc import Callable
 import json
 
 from valley.exceptions import ValidationException
@@ -54,7 +54,7 @@ class BaseSchema(object):
             try:
                 prop.validate(data.get(key), key)
                 # This allows devs to specify additional validation for a property
-                if isinstance(prop_validate, collections.Callable):
+                if isinstance(prop_validate, Callable):
                     prop_validate(data.get(key))
             except ValidationException as e:
 

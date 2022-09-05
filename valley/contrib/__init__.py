@@ -13,6 +13,6 @@ class DeclarativeVariablesMetaclass(DVM):
     declared_vars_class = DeclaredVars
 
 
-class Schema(BaseSchema,metaclass=DeclarativeVariablesMetaclass):
+class Schema(BaseSchema, metaclass=DeclarativeVariablesMetaclass):
 
     BUILTIN_DOC_ATTRS = []

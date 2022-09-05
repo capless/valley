@@ -1,4 +1,4 @@
-import collections
+from collections.abc import Callable
 import datetime
 import json
 import time
@@ -32,7 +32,7 @@ class VariableMixin(object):
     def get_default_value(self):
         """ return default value """
         default = self.default_value
-        if isinstance(default, collections.Callable):
+        if isinstance(default, Callable):
             default = default()
         return default
 
