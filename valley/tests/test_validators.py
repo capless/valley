@@ -5,10 +5,9 @@ from valley.validators import (RequiredValidator, DateTimeValidator,
                             MaxLengthValidator, MinLengthValidator,
                             MaxValueValidator, MinValueValidator,
                             StringValidator, ValidationException,
-                            BooleanValidator,DictValidator,
+                            BooleanValidator, DictValidator,
                             ListValidator
                             )
-
 
 class ValidatorsTestCase(unittest.TestCase):
 
@@ -16,7 +15,7 @@ class ValidatorsTestCase(unittest.TestCase):
         with self.assertRaises(ValidationException) as vm:
             RequiredValidator().validate(None, 'first_name')
         self.assertEqual(str(vm.exception),
-                         'first_name: This value is required')
+                         'first_name is required and cannot be empty.')
         # Test with valid input
         RequiredValidator().validate('First Name', 'first_name')
 
@@ -40,7 +39,7 @@ class ValidatorsTestCase(unittest.TestCase):
         with self.assertRaises(ValidationException) as vm:
             FloatValidator().validate(1, 'no_packages')
         self.assertEqual(str(vm.exception),
-                         'no_packages: This value should be a float.')
+                         'no_packages must be a float.')
         # Test with valid input
         FloatValidator().validate(1.3, 'no_packages')
 
@@ -48,7 +47,7 @@ class ValidatorsTestCase(unittest.TestCase):
         with self.assertRaises(ValidationException) as vm:
             IntegerValidator().validate(1.2, 'no_packages')
         self.assertEqual(str(vm.exception),
-                         'no_packages: This value should be an integer')
+                         'no_packages must be an integer.')
         # Test with valid input
         IntegerValidator().validate(1, 'no_packages')
 
@@ -56,7 +55,7 @@ class ValidatorsTestCase(unittest.TestCase):
         with self.assertRaises(ValidationException) as vm:
             MaxLengthValidator(2).validate('123', 'no_packages')
         self.assertEqual(str(vm.exception),
-                         'no_packages: This value should have a length lesser than or equal to 2. Currently 123')
+                         'no_packages must not be longer than 2 characters.')
         # Test with valid input
         MaxLengthValidator(2).validate('12', 'no_packages')
 
@@ -64,7 +63,7 @@ class ValidatorsTestCase(unittest.TestCase):
         with self.assertRaises(ValidationException) as vm:
             MinLengthValidator(2).validate('1', 'no_packages')
         self.assertEqual(str(vm.exception),
-                         'no_packages: This value should have a length greater than or equal to 2. Currently 1')
+                         'no_packages must not be shorter than 2 characters.')
         # Test with valid input
         MinLengthValidator(2).validate('123', 'no_packages')
 
@@ -72,7 +71,7 @@ class ValidatorsTestCase(unittest.TestCase):
         with self.assertRaises(ValidationException) as vm:
             MaxValueValidator(2).validate(3, 'no_packages')
         self.assertEqual(str(vm.exception),
-                         'no_packages: This value should have a value lesser than or equal to 2. Currently 3')
+                         'no_packages must not be greater than 2.')
         # Test with valid input
         MaxValueValidator(2).validate(1, 'no_packages')
 
@@ -80,7 +79,7 @@ class ValidatorsTestCase(unittest.TestCase):
         with self.assertRaises(ValidationException) as vm:
             MinValueValidator(2).validate(1, 'no_packages')
         self.assertEqual(str(vm.exception),
-                         'no_packages: This value should have a value greater than or equal to 2. Currently 1')
+                         'no_packages must not be less than 2.')
         # Test with valid input
         MinValueValidator(2).validate(3, 'no_packages')
 
@@ -88,7 +87,7 @@ class ValidatorsTestCase(unittest.TestCase):
         with self.assertRaises(ValidationException) as vm:
             StringValidator().validate(1, 'last_name')
         self.assertEqual(str(vm.exception),
-                         'last_name: This value should be a string')
+                         'last_name must be a string.')
         # Test with valid input
         StringValidator().validate('Jones', 'last_name')
 
@@ -96,7 +95,7 @@ class ValidatorsTestCase(unittest.TestCase):
         with self.assertRaises(ValidationException) as vm:
             BooleanValidator().validate(1, 'last_name')
         self.assertEqual(str(vm.exception),
-                         'last_name: This value should be True or False.')
+                         'last_name must be a boolean.')
         # Test with valid input
         BooleanValidator().validate(True, 'last_name')
         BooleanValidator().validate(False, 'last_name')
@@ -105,14 +104,16 @@ class ValidatorsTestCase(unittest.TestCase):
         with self.assertRaises(ValidationException) as vm:
             DictValidator().validate(1, 'person')
         self.assertEqual(str(vm.exception),
-                         'person: This value should be a dict object.')
+                         'person must be a dictionary.')
+        # Test with valid input
         DictValidator().validate({'first':'Brian','last':'Jones'}, 'person')
 
     def test_list_validator(self):
         with self.assertRaises(ValidationException) as vm:
             ListValidator().validate(1, 'schools')
         self.assertEqual(str(vm.exception),
-                         'schools: This value should be a list object.')
+                         'schools must be a list.')
+        # Test with valid input
         ListValidator().validate(['Ridge Valley High','Lewis Cone Elementary'],'schools')
 
 

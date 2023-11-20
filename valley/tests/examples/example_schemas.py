@@ -5,7 +5,7 @@ from valley.validators import *
 
 class Student(Schema):
     _create_error_dict = True
-    name = CharProperty(required=True,min_length=5,max_length=20)
+    name = StringProperty(required=True, min_length=5, max_length=20)
     slug = SlugProperty(required=True,min_length=5,max_length=25)
     email = EmailProperty(required=True)
     age = IntegerProperty(min_value=5,max_value=18)
@@ -21,7 +21,7 @@ class StudentB(Student):
 
 class NameSchema(Schema):
     _create_error_dict = True
-    name = CharProperty(required=True)
+    name = StringProperty(required=True)
 
     def __unicode__(self):
         return self.name

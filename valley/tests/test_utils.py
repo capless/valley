@@ -4,26 +4,26 @@ import json
 from valley.utils import import_util
 from valley.utils.json_utils import (ValleyEncoder,ValleyDecoder,
                                      ValleyEncoderNoType)
-from valley.tests.examples.schemas import durham
+from valley.tests.examples.example_schemas import durham
 
 
 class UtilTest(unittest.TestCase):
 
     json_string = '{"dogs": [{"breed": {"name": "Cocker Spaniel",' \
-                      ' "_type": "valley.tests.examples.schemas.Breed"},' \
+                      ' "_type": "valley.tests.examples.example_schemas.Breed"},' \
                       ' "name": "Bruno", "_type": "valley.tests.examples.' \
-                      'schemas.Dog"}, {"breed": {"name": "Cockapoo", ' \
-                      '"_type": "valley.tests.examples.schemas.Breed"}' \
+                      'example_schemas.Dog"}, {"breed": {"name": "Cockapoo", ' \
+                      '"_type": "valley.tests.examples.example_schemas.Breed"}' \
                       ', "name": "Blitz", "_type": ' \
-                      '"valley.tests.examples.schemas.Dog"}], ' \
+                      '"valley.tests.examples.example_schemas.Dog"}], ' \
                       '"primary_breed": {"name": "Cocker Spaniel", ' \
-                      '"_type": "valley.tests.examples.schemas.Breed"}, ' \
+                      '"_type": "valley.tests.examples.example_schemas.Breed"}, ' \
                       '"name": "Durham", "_type": ' \
-                      '"valley.tests.examples.schemas.Troop"}'
+                      '"valley.tests.examples.example_schemas.Troop"}'
 
     def test_import_util(self):
-        klass = import_util('valley.mixins.VariableMixin')
-        self.assertEqual('VariableMixin', klass.__name__)
+        klass = import_util('valley.properties.SlugProperty')
+        self.assertEqual('SlugProperty', klass.__name__)
 
     def test_json_encoder(self):
         self.assertEqual(json.dumps(durham,cls=ValleyEncoder),self.json_string)

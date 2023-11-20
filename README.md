@@ -41,12 +41,12 @@ Python 3.6+
 
 ### Schema and Declarative Syntax Helpers
 
-The schema class **[(valley.contrib.Schema)](https://github.com/capless/valley/blob/master/valley/contrib/__init__.py)** provides the model for validating properties. Valley also includes utilities **[(valley.declarative)](https://github.com/capless/valley/blob/master/valley/declarative.py)** to make building declarative syntax validation libraries easier. See an example below. 
- 
+The schema class **[(valley.contrib.Schema)](https://github.com/capless/valley/blob/master/valley/contrib/__init__.py)** provides the model for validating properties. Valley also includes utilities **[(valley.declarative)](https://github.com/capless/valley/blob/master/valley/declarative.py)** to make building declarative syntax validation libraries easier. See an example below.
+
 ```python
 from six import with_metaclass
 
-from valley.declarative import DeclaredVars as DV, \
+from valley.declarative import DeclaredVars as DV,
     DeclarativeVariablesMetaclass as DVM
 from valley.schema import BaseSchema
 from valley.properties import *
@@ -64,14 +64,15 @@ class DeclarativeVariablesMetaclass(DVM):
 class Schema(with_metaclass(DeclarativeVariablesMetaclass, BaseSchema)):
     _create_error_dict = False
     BUILTIN_DOC_ATTRS = []
-    
-#If you just want to build upon an existing schema use valley.contrib.Schema
+
+
+# If you just want to build upon an existing schema use valley.contrib.Schema
 
 class Animal(Schema):
-    name = CharProperty(required=True)
-    species = CharProperty(required=True)
-    color = CharProperty(required=True)
-    meal_type = CharProperty()
+    name = StringProperty(required=True)
+    species = StringProperty(required=True)
+    color = StringProperty(required=True)
+    meal_type = StringProperty()
     age = IntegerProperty(required=True)
 ```
 
@@ -120,10 +121,10 @@ Validates that the input is a string type.
 ##### Example
 
 ```python
-from valley.properties import CharProperty
+from valley.properties import StringProperty
 
-first_name = CharProperty(required=True,min_length=1,max_length=20)
-first_name.validate('Some string','First Name')
+first_name = StringProperty(required=True, min_length=1, max_length=20)
+first_name.validate('Some string', 'First Name')
 ```
 
 ##### Default Validators
@@ -362,9 +363,10 @@ from valley.utils.json_utils import ValleyEncoder
 from valley.contrib import Schema
 from valley.properties import *
 
+
 class NameSchema(Schema):
     _create_error_dict = True
-    name = CharProperty(required=True)
+    name = StringProperty(required=True)
 
     def __unicode__(self):
         return self.name
@@ -375,50 +377,49 @@ class Breed(NameSchema):
 
 
 class Dog(NameSchema):
-    breed = ForeignProperty(Breed,required=True)
+    breed = ForeignProperty(Breed, required=True)
 
 
 class Troop(NameSchema):
     dogs = ForeignListProperty(Dog)
     primary_breed = ForeignProperty(Breed)
 
+>> > cocker = Breed(name='Cocker Spaniel')
 
->>> cocker = Breed(name='Cocker Spaniel')
+>> > cockapoo = Breed(name='Cockapoo')
 
->>> cockapoo = Breed(name='Cockapoo')
+>> > bruno = Dog(name='Bruno', breed=cocker)
 
->>> bruno = Dog(name='Bruno',breed=cocker)
+>> > blitz = Dog(name='Blitz', breed=cockapoo)
 
->>> blitz = Dog(name='Blitz',breed=cockapoo)
+>> > durham = Troop(name='Durham', dogs=[bruno, blitz], primary_breed=cocker)
 
->>> durham = Troop(name='Durham',dogs=[bruno,blitz],primary_breed=cocker)
-
->>> print(json.dumps(durham, cls=ValleyEncoder))
+>> > print(json.dumps(durham, cls=ValleyEncoder))
 {
-  "dogs": [
-    {
-      "breed": {
+    "dogs": [
+        {
+            "breed": {
+                "name": "Cocker Spaniel",
+                "_type": "valley.tests.examples.schemas.Breed"
+            },
+            "name": "Bruno",
+            "_type": "valley.tests.examples.schemas.Dog"
+        },
+        {
+            "breed": {
+                "name": "Cockapoo",
+                "_type": "valley.tests.examples.schemas.Breed"
+            },
+            "name": "Blitz",
+            "_type": "valley.tests.examples.schemas.Dog"
+        }
+    ],
+    "primary_breed": {
         "name": "Cocker Spaniel",
         "_type": "valley.tests.examples.schemas.Breed"
-      },
-      "name": "Bruno",
-      "_type": "valley.tests.examples.schemas.Dog"
     },
-    {
-      "breed": {
-        "name": "Cockapoo",
-        "_type": "valley.tests.examples.schemas.Breed"
-      },
-      "name": "Blitz",
-      "_type": "valley.tests.examples.schemas.Dog"
-    }
-  ],
-  "primary_breed": {
-    "name": "Cocker Spaniel",
-    "_type": "valley.tests.examples.schemas.Breed"
-  },
-  "name": "Durham",
-  "_type": "valley.tests.examples.schemas.Troop"
+    "name": "Durham",
+    "_type": "valley.tests.examples.schemas.Troop"
 }
 ```
 
@@ -434,9 +435,10 @@ from valley.utils.json_utils import ValleyEncoderNoType
 from valley.contrib import Schema
 from valley.properties import *
 
+
 class NameSchema(Schema):
     _create_error_dict = True
-    name = CharProperty(required=True)
+    name = StringProperty(required=True)
 
     def __unicode__(self):
         return self.name
@@ -447,44 +449,43 @@ class Breed(NameSchema):
 
 
 class Dog(NameSchema):
-    breed = ForeignProperty(Breed,required=True)
+    breed = ForeignProperty(Breed, required=True)
 
 
 class Troop(NameSchema):
     dogs = ForeignListProperty(Dog)
     primary_breed = ForeignProperty(Breed)
 
+>> > cocker = Breed(name='Cocker Spaniel')
 
->>> cocker = Breed(name='Cocker Spaniel')
+>> > cockapoo = Breed(name='Cockapoo')
 
->>> cockapoo = Breed(name='Cockapoo')
+>> > bruno = Dog(name='Bruno', breed=cocker)
 
->>> bruno = Dog(name='Bruno',breed=cocker)
+>> > blitz = Dog(name='Blitz', breed=cockapoo)
 
->>> blitz = Dog(name='Blitz',breed=cockapoo)
+>> > durham = Troop(name='Durham', dogs=[bruno, blitz], primary_breed=cocker)
 
->>> durham = Troop(name='Durham',dogs=[bruno,blitz],primary_breed=cocker)
-
->>> print(json.dumps(durham, cls=ValleyEncoderNoType))
+>> > print(json.dumps(durham, cls=ValleyEncoderNoType))
 {
-  "dogs": [
-    {
-      "breed": {
+    "dogs": [
+        {
+            "breed": {
+                "name": "Cocker Spaniel"
+            },
+            "name": "Bruno"
+        },
+        {
+            "breed": {
+                "name": "Cockapoo"
+            },
+            "name": "Blitz"
+        }
+    ],
+    "primary_breed": {
         "name": "Cocker Spaniel"
-      },
-      "name": "Bruno"
     },
-    {
-      "breed": {
-        "name": "Cockapoo"
-      },
-      "name": "Blitz"
-    }
-  ],
-  "primary_breed": {
-    "name": "Cocker Spaniel"
-  },
-  "name": "Durham"
+    "name": "Durham"
 }
 ```
 
