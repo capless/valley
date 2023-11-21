@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "valley"
-version = "1.5.8"
+version = "1.6"
 description = "Python extensible schema validations and declarative syntax helpers."
 authors = ["Brian Jinwright"]
 license = "Apache-2.0"
@@ -16,7 +16,7 @@ keywords=['validations,schema,declarative']
 
 [tool.poetry.dependencies]
 python = "^3.7"
-envs = "^1.3"
+envs = "^1.4"
 
 [tool.poetry.dev-dependencies]
 jupyter = "^1.0.0"

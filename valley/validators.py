@@ -1,5 +1,6 @@
 import re
 import datetime
+import time
 from typing import Any, List, Dict, Type, Optional
 
 from valley.exceptions import ValidationException
@@ -109,21 +110,19 @@ class MaxLengthValidator(Validator):
 
 
 class DateValidator(Validator):
-    def validate(self, value: str, key: Optional[str] = None) -> None:
-        """Validates if the given string is a valid date in '%Y-%m-%d' format.
 
-        Args:
-            value (str): The date string to validate.
-            key (Optional[str]): An optional key for error messages.
-
-        Raises:
-            ValidationException: If the value is not a valid date.
-        """
-        if value:
+    def validate(self, value, key=None):
+        if not value:
+            return
+        if value and isinstance(value, str):
             try:
-                datetime.datetime.strptime(value, '%Y-%m-%d').date()
+                value = datetime.date(*time.strptime(value, '%Y-%m-%d')[:3])
             except ValueError:
-                raise ValidationException(f'{key}: This value should be a valid date object.')
+                pass
+        if value and not isinstance(value, datetime.date):
+            raise ValidationException(
+                '{0}: This value should be a valid date object.'.format(key))
+
 
 class DateTimeValidator(Validator):
 
@@ -138,9 +137,8 @@ class DateTimeValidator(Validator):
             except (IndexError, KeyError, ValueError):
                 pass
         if value and not isinstance(value, datetime.datetime):
-            raise ValidationException(f'{key}: This value should be a valid datetime object.')
-
-
+            raise ValidationException(
+                '{0}: This value should be a valid datetime object.'.format(key))
 class BooleanValidator(Validator):
     """
     Validator to ensure a value is a boolean.

@@ -1,7 +1,7 @@
 import collections
 import unittest
 
-from valley import BaseSchema
+from valley.schema import BaseSchema
 from valley.declarative import DeclaredVars, DeclarativeVariablesMetaclass
 from valley.properties import BaseProperty
 

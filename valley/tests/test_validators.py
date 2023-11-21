@@ -1,13 +1,15 @@
-import unittest
 import datetime
+import unittest
+
 from valley.validators import (RequiredValidator, DateTimeValidator,
-                            DateValidator, FloatValidator, IntegerValidator,
-                            MaxLengthValidator, MinLengthValidator,
-                            MaxValueValidator, MinValueValidator,
-                            StringValidator, ValidationException,
-                            BooleanValidator, DictValidator,
-                            ListValidator
-                            )
+                               DateValidator, FloatValidator, IntegerValidator,
+                               MaxLengthValidator, MinLengthValidator,
+                               MaxValueValidator, MinValueValidator,
+                               StringValidator, ValidationException,
+                               BooleanValidator, DictValidator,
+                               ListValidator
+                               )
+
 
 class ValidatorsTestCase(unittest.TestCase):
 
@@ -106,7 +108,7 @@ class ValidatorsTestCase(unittest.TestCase):
         self.assertEqual(str(vm.exception),
                          'person must be a dictionary.')
         # Test with valid input
-        DictValidator().validate({'first':'Brian','last':'Jones'}, 'person')
+        DictValidator().validate({'first': 'Brian', 'last': 'Jones'}, 'person')
 
     def test_list_validator(self):
         with self.assertRaises(ValidationException) as vm:
@@ -114,7 +116,7 @@ class ValidatorsTestCase(unittest.TestCase):
         self.assertEqual(str(vm.exception),
                          'schools must be a list.')
         # Test with valid input
-        ListValidator().validate(['Ridge Valley High','Lewis Cone Elementary'],'schools')
+        ListValidator().validate(['Ridge Valley High', 'Lewis Cone Elementary'], 'schools')
 
 
 if __name__ == '__main__':

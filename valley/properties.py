@@ -18,7 +18,6 @@ __all__ = [
     'ForeignListProperty', 'MultiProperty'
 ]
 
-
 class BaseProperty:
     """
     Base class for defining properties in the Valley library.

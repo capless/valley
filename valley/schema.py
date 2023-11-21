@@ -1,7 +1,10 @@
 import json
 from typing import Any, Dict
 
+from valley.declarative import DeclaredVars as DV, \
+    DeclarativeVariablesMetaclass as DVM
 from valley.exceptions import ValidationException
+from valley.properties import BaseProperty
 
 
 class BaseSchema:
@@ -131,3 +134,23 @@ class BaseSchema:
             Dict[str, Any]: A dictionary representation of the schema data.
         """
         return self._data
+
+
+class DeclaredVars(DV):
+    """
+    A class that stores the schema properties.
+
+    Attributes:
+        base_field_class (BaseProperty): The base field class for the schema.
+        base_field_type (str): The name of the attribute that stores the schema properties.
+    """
+    base_field_class = BaseProperty
+    base_field_type = '_base_properties'
+
+
+class DeclarativeVariablesMetaclass(DVM):
+    declared_vars_class = DeclaredVars
+
+
+class Schema(BaseSchema, metaclass=DeclarativeVariablesMetaclass):
+    BUILTIN_DOC_ATTRS = []

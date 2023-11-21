@@ -1,8 +1,8 @@
 import unittest
-import datetime
 
 from valley.exceptions import ValidationException
 from valley.tests.examples.example_schemas import StudentB, Student, Troop, bruno, blitz, cocker
+
 
 class SchemaTestCase(unittest.TestCase):
 
@@ -88,8 +88,8 @@ class SchemaTestCase(unittest.TestCase):
         self.student.age = 5.0
         self.student.validate()
         ed = {'age': 'age must be an integer.'}
-        print(f"Student Errors: {self.student._errors}")
         self.assertDictEqual(ed, self.student._errors)
+
 
 class SchemaMethods(unittest.TestCase):
 
@@ -115,6 +115,7 @@ class SchemaMethods(unittest.TestCase):
     def test_error_dict_false_validate(self):
         self.studentb.name = 1
         self.assertRaises(ValidationException, self.studentb.validate)
+
 
 if __name__ == '__main__':
     unittest.main()
