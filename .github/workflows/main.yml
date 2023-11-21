@@ -42,7 +42,7 @@ jobs:
       - name: Run Unit Tests
         run: docker-compose run web poetry run python -m unittest
       - name: Build and publish to pypi
-        if: github.ref == 'refs/heads/master' && steps.unit_tests.outcome == 'success'
+        if: github.ref == 'refs/heads/master'
         uses: JRubics/poetry-publish@v1.13
         with:
           pypi_token: ${{ secrets.PYPI_TOKEN }}
