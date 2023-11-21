@@ -42,8 +42,10 @@ jobs:
       - name: Run Unit Tests
         run: docker-compose run web poetry run python -m unittest
       - name: Build and publish to pypi
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' && steps.unit_tests.outcome == 'success'
         uses: JRubics/poetry-publish@v1.13
         with:
           pypi_token: ${{ secrets.PYPI_TOKEN }}
           ignore_dev_requirements: "yes"
+      - name: Remove .env file
+        run: rm .env
