@@ -35,7 +35,7 @@ class BaseProperty:
 
     def __init__(self, default_value: Any = None, required: bool = False,
                  validators: Optional[List[Callable]] = None,
-                 choices: Optional[Dict[Any]] = None, **kwargs):
+                 choices: Optional[Dict[str, Any]] = None, **kwargs):
         self.default_value = default_value
         self.required = required
         self.validators = validators if validators is not None else []
