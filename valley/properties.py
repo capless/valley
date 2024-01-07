@@ -1,6 +1,6 @@
 import json
 from collections.abc import Callable
-from typing import Any, Optional, Type, List
+from typing import Any, Optional, Type, List, Dict
 
 from valley.utils.json_utils import ValleyEncoder
 from .validators import (
@@ -35,7 +35,7 @@ class BaseProperty:
 
     def __init__(self, default_value: Any = None, required: bool = False,
                  validators: Optional[List[Callable]] = None,
-                 choices: Optional[List[Any]] = None, **kwargs):
+                 choices: Optional[Dict[Any]] = None, **kwargs):
         self.default_value = default_value
         self.required = required
         self.validators = validators if validators is not None else []

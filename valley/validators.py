@@ -12,17 +12,21 @@ class Validator:
 
     This class provides basic structure and interface for all specific validators.
     """
-
+    is_required_regardless: bool = False
     def validate(self, value: Any, name: str) -> None:
+        # Ignore None values if the ignore_none flag is True
+        if value is None and not self.is_required_regardless:
+            return
+
+        self.perform_validation(value, name)
+
+    def perform_validation(self, value: Any, name: str) -> None:
         """
-        Validates the given value.
+        Method to perform validation, to be implemented by subclasses.
 
         Args:
             value (Any): The value to validate.
             name (str): The name of the property being validated.
-
-        Raises:
-            ValidationException: If the validation fails.
         """
         raise NotImplementedError
 
@@ -31,8 +35,8 @@ class RequiredValidator(Validator):
     """
     Validator to ensure a value is not None or empty.
     """
-
-    def validate(self, value: Any, name: str) -> None:
+    is_required_regardless: bool = True
+    def perform_validation(self, value: Any, name: str) -> None:
         if value is None or value == '':
             raise ValidationException(f'{name} is required and cannot be empty.')
 
@@ -42,7 +46,7 @@ class StringValidator(Validator):
     Validator to ensure a value is a string.
     """
 
-    def validate(self, value: Any, name: str) -> None:
+    def perform_validation(self, value: Any, name: str) -> None:
         if not isinstance(value, str):
             raise ValidationException(f'{name} must be a string.')
 
@@ -52,7 +56,7 @@ class IntegerValidator(Validator):
     Validator to ensure a value is an integer.
     """
 
-    def validate(self, value: Any, name: str) -> None:
+    def perform_validation(self, value: Any, name: str) -> None:
         if not isinstance(value, int):
             raise ValidationException(f'{name} must be an integer.')
 
@@ -65,7 +69,7 @@ class MaxValueValidator(Validator):
     def __init__(self, max_value: int) -> None:
         self.max_value = max_value
 
-    def validate(self, value: int, name: str) -> None:
+    def perform_validation(self, value: int, name: str) -> None:
         if value > self.max_value:
             raise ValidationException(f'{name} must not be greater than {self.max_value}.')
 
@@ -78,7 +82,7 @@ class MinValueValidator(Validator):
     def __init__(self, min_value: int) -> None:
         self.min_value = min_value
 
-    def validate(self, value: int, name: str) -> None:
+    def perform_validation(self, value: int, name: str) -> None:
         if value < self.min_value:
             raise ValidationException(f'{name} must not be less than {self.min_value}.')
 
@@ -91,7 +95,7 @@ class MinLengthValidator(Validator):
     def __init__(self, min_length: int) -> None:
         self.min_length = min_length
 
-    def validate(self, value: str, name: str) -> None:
+    def perform_validation(self, value: str, name: str) -> None:
         if len(value) < self.min_length:
             raise ValidationException(f'{name} must not be shorter than {self.min_length} characters.')
 
@@ -104,14 +108,14 @@ class MaxLengthValidator(Validator):
     def __init__(self, max_length: int) -> None:
         self.max_length = max_length
 
-    def validate(self, value: str, name: str) -> None:
+    def perform_validation(self, value: str, name: str) -> None:
         if len(value) > self.max_length:
             raise ValidationException(f'{name} must not be longer than {self.max_length} characters.')
 
 
 class DateValidator(Validator):
 
-    def validate(self, value, key=None):
+    def perform_validation(self, value, key=None):
         if not value:
             return
         if value and isinstance(value, str):
@@ -126,7 +130,7 @@ class DateValidator(Validator):
 
 class DateTimeValidator(Validator):
 
-    def validate(self, value, key=None):
+    def perform_validation(self, value, key=None):
         if not value:
             return
         if value and isinstance(value, str):
@@ -144,7 +148,7 @@ class BooleanValidator(Validator):
     Validator to ensure a value is a boolean.
     """
 
-    def validate(self, value: bool, name: str) -> None:
+    def perform_validation(self, value: bool, name: str) -> None:
         if not isinstance(value, bool):
             raise ValidationException(f'{name} must be a boolean.')
 
@@ -153,12 +157,12 @@ class ChoiceValidator(Validator):
     """
     Validator to ensure a value is within a set of choices.
     """
-
-    def __init__(self, choices: List[Any]) -> None:
+    choices: dict
+    def __init__(self, choices: Dict[Any]) -> None:
         self.choices = choices
 
-    def validate(self, value: Any, name: str) -> None:
-        if value not in self.choices:
+    def perform_validation(self, value: Any, name: str) -> None:
+        if value not in self.choices.values():
             raise ValidationException(f'{name} must be one of {self.choices}.')
 
 
@@ -167,7 +171,7 @@ class DictValidator(Validator):
     Validator to ensure a value is a dictionary.
     """
 
-    def validate(self, value: Dict[Any, Any], name: str) -> None:
+    def perform_validation(self, value: Dict[Any, Any], name: str) -> None:
         if not isinstance(value, dict):
             raise ValidationException(f'{name} must be a dictionary.')
 
@@ -177,7 +181,7 @@ class ListValidator(Validator):
     Validator to ensure a value is a list.
     """
 
-    def validate(self, value: List[Any], name: str) -> None:
+    def perform_validation(self, value: List[Any], name: str) -> None:
         if not isinstance(value, list):
             raise ValidationException(f'{name} must be a list.')
 
@@ -190,7 +194,7 @@ class ForeignValidator(Validator):
     def __init__(self, foreign_class: Any) -> None:
         self.foreign_class = foreign_class
 
-    def validate(self, value: Any, name: str) -> None:
+    def perform_validation(self, value: Any, name: str) -> None:
         if not isinstance(value, self.foreign_class):
             raise ValidationException(f'{name} must be an instance of {self.foreign_class.__name__}.')
 
@@ -203,7 +207,7 @@ class MultiValidator(Validator):
     def __init__(self, validators: List[Validator]) -> None:
         self.validators = validators
 
-    def validate(self, value: Any, name: str) -> None:
+    def perform_validation(self, value: Any, name: str) -> None:
         for validator in self.validators:
             validator.validate(value, name)
 
@@ -213,7 +217,7 @@ class FloatValidator(Validator):
     Validator to ensure a value is a float.
     """
 
-    def validate(self, value: Any, name: str) -> None:
+    def perform_validation(self, value: Any, name: str) -> None:
         """
         Validates that the given value is a float.
 
@@ -236,7 +240,7 @@ class SlugValidator(Validator):
     def __init__(self):
         self.slug_pattern = re.compile(r'^[-a-zA-Z0-9_]+$')
 
-    def validate(self, value: str, name: str) -> None:
+    def perform_validation(self, value: str, name: str) -> None:
         """
         Validates that the given value is a valid slug.
 
@@ -257,9 +261,12 @@ class EmailValidator(Validator):
     """
 
     def __init__(self):
-        self.email_pattern = re.compile(r'^[\w\.-]+@[\w\.-]+\.\w+$')
+        self.email_pattern = re.compile(
+    r"(^[-!#$%&'*+/=?^_`{}|~0-9A-Z]+(\.[-!#$%&'*+/=?^_`{}|~0-9A-Z]+)*"  # dot-atom
+    r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-011\013\014\016-\177])*"' # quoted-string
+    r')@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?$', re.IGNORECASE)  # domain
 
-    def validate(self, value: str, name: str) -> None:
+    def perform_validation(self, value: str, name: str) -> None:
         """
         Validates that the given value is a valid email address.
 
@@ -287,7 +294,7 @@ class ForeignListValidator(Validator):
         """
         self.foreign_class = foreign_class
 
-    def validate(self, value: List[Any], name: str) -> None:
+    def perform_validation(self, value: List[Any], name: str) -> None:
         """
         Validates that all items in the list are instances of the specified class.
 
