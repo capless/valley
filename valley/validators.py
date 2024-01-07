@@ -57,8 +57,13 @@ class IntegerValidator(Validator):
     """
 
     def perform_validation(self, value: Any, name: str) -> None:
-        if not isinstance(value, int):
+        if isinstance(value, float):
             raise ValidationException(f'{name} must be an integer.')
+        try:
+            int(value)
+        except ValueError:
+            raise ValidationException(f'{name} must be an integer.')
+
 
 
 class MaxValueValidator(Validator):
@@ -228,7 +233,9 @@ class FloatValidator(Validator):
         Raises:
             ValidationException: If the value is not a float.
         """
-        if not isinstance(value, float):
+        try:
+            float(value)
+        except ValueError:
             raise ValidationException(f'{name} must be a float.')
 
 
