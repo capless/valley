@@ -158,7 +158,7 @@ class ChoiceValidator(Validator):
     Validator to ensure a value is within a set of choices.
     """
     choices: dict
-    def __init__(self, choices: Dict[Any]) -> None:
+    def __init__(self, choices: Dict[str, Any]) -> None:
         self.choices = choices
 
     def perform_validation(self, value: Any, name: str) -> None:
